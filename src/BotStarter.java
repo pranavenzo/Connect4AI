@@ -32,8 +32,9 @@ public class BotStarter {
 
     HashMap<Integer, List<Integer>> alphaMap;
 
-    int MAX_DEPTH = 9;
-   int max_depth = 7;
+    int MAX_DEPTH = 7;
+
+    int max_depth = 7;
 
     Map<String, List<Integer>> banned;
 
@@ -45,6 +46,7 @@ public class BotStarter {
      * @return The column where the turn was made.
      */
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, int botNum) {
+        calls = 0;
         this.banned = banned;
         alphaMap = new HashMap<>();
         this.field = mfield;
@@ -57,11 +59,11 @@ public class BotStarter {
         /*int depth = depthTarget();
         System.out.println(depth);
         MAX_DEPTH = depth;*/
-        try {
+      /*  try {
             fillMap();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         if (botNum == 1) {
             int move = treePrune(field);
             return move;
@@ -71,6 +73,7 @@ public class BotStarter {
         if (moves == null) return (int) (Math.random() * (double) field.getNrColumns());
         Integer move;
         move = moves.get((int) (Math.random() * moves.size()));
+        // System.out.println(calls);
         return move;
     }
 
@@ -125,18 +128,21 @@ public class BotStarter {
     }
 
     private int isBanned(Field field, int col, int ret, int sign) {
-        if (banned == null || field == null) return ret;
+        /*if (banned == null || field == null) return ret;
         List<Integer> bannedList = banned.get(field.toString());
         if (field.toString().equals("0,0,1,2,0,0,0,0,0,2,1,0,0,0,2,0,1,1,0,2,0,1,0,2,2,0,1,0,2,0,1,2,0,2,0,1,0,2,1,2,1,0"))
             System.out.println(bannedList + " " + col);
         if (bannedList == null) return ret;
         for (int i = 0; i < bannedList.size(); i++) {
             if (col == bannedList.get(i)) return sign * 10000;
-        }
+        }*/
         return ret;
     }
 
+    private static int calls;
+
     public int prune(int depth, Field pruneField, int alpha, int beta, boolean isMaximizer) {
+        calls++;
         boolean isChanged = false;
         if (depth == 0) {
             int x = evalFunction(pruneField);
@@ -214,6 +220,8 @@ public class BotStarter {
         GameNode gameNode = new GameNode(field);
         LinkedList<GameNode> queue = new LinkedList<>();
         unexploredChildren = new HashMap<>();
+        Map<String, GameNode> reverseMap = new HashMap<>();
+        reverseMap.put(gameNode.toString(), gameNode);
         queue.add(gameNode);
         while (!queue.isEmpty()) {
             GameNode nextOne = queue.removeFirst();
@@ -248,12 +256,20 @@ public class BotStarter {
                 Field childField = new Field(nextOne.getField());
                 if (childField.addDisc(i, childPlayer)) {
                     GameNode child = new GameNode(childField, nextOne, i, player);
+                    /*GameNode longLostChild = reverseMap.get(child.toString());
+                    if (longLostChild != null) {
+                        GameNode fake = new GameNode(longLostChild, i, nextOne);
+                        fake.passAlphaOrBetaValueUp(); //ghost child creation
+                        continue;
+                    }*/
+                    reverseMap.put(child.toString(), child);
                     child.checkWinner(i, childPlayer);
+                    if (child.getScore() == 0) child.setScore();
                     nextOne.addChild(i, child);
                     unexploredChildren.put(nextOne.toString(), unexploredChildren.get(nextOne.toString()) + 1);
                 }
             }
-            //nextOne.sortChildren();
+            nextOne.sortChildren();
             queue.addAll(0, nextOne.getChildren());
         }
         //System.out.println(unexploredChildren.size());
@@ -342,7 +358,6 @@ public class BotStarter {
             }
         }
         return score[player] = score[3 - player];
-
     }
 
     public static void main(String[] args) {

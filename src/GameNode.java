@@ -76,9 +76,9 @@ public class GameNode {
     }
 
     public boolean shouldIPrune() {
-        if (!isMaximizer && parent.alpha > parent.parent.beta) {
+        if (!isMaximizer && parent.alpha >= parent.parent.beta) {
             return true;
-        } else if (isMaximizer && parent.beta < parent.parent.alpha) {
+        } else if (isMaximizer && parent.beta <= parent.parent.alpha) {
             return true;
         }
         return false;
@@ -142,7 +142,7 @@ public class GameNode {
     }
 
     public void setScore() {
-        this.score = evaluationFunction();
+        this.score = newEval();
     }
 
     public void checkWinner(int col, int myBot) {
@@ -151,6 +151,20 @@ public class GameNode {
             else this.score = BotStarter.loser;
             this.setLeaf();
         }
+    }
+
+    private double newEval() {
+        Winner winner = new Winner(this.field);
+        int total = 0;
+        for (int i = 0; i < field.getNrRows(); i++) {
+            for (int j = 0; j < field.getNrColumns(); j++) {
+                int score = winner.checkAlignment2(i, j);
+                if (field.getDisc(i, j) == player)
+                    total = total + score;
+                else total = total - score;
+            }
+        }
+        return total;
     }
 
     private double evaluationFunction() {
@@ -207,8 +221,14 @@ public class GameNode {
         //return 0;
     }
 
+    private int scoreForPos(int i, int j, Field pruneField) {
+        if (pruneField.getDisc(i, j) == 0) return 0;
+        int sign = Math.abs(pruneField.getDisc(i, j) - player) * -1;
+        return 0;
+    }
+
     public void sortChildren() {
-        if (isMaximizer) {
+        if (!isMaximizer) {
             children.sort(Collections.reverseOrder(new GameNodeComparator()));
         } else children.sort(new GameNodeComparator());
     }

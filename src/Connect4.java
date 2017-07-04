@@ -190,7 +190,7 @@ public class Connect4 {
     /**
      * Launch the game for one game.
      */
-    public void play() throws IOException {
+    public void play(int bot1, int bot2) throws IOException {
         List<Integer> moves = new LinkedList<>();
         char currentPlayer = RED;
         // Begin playing the game
@@ -199,18 +199,18 @@ public class Connect4 {
         int row = -1;
         do {
             currentPlayer = currentPlayer == RED ? YELLOW : RED;
-            //this.printScreen();
-            //System.out.printf("Current player: '%c'\n", currentPlayer);
-            // read and validate the input
+            /*this.printScreen();
+            System.out.printf("Current player: '%c'\n", currentPlayer);
+            */// read and validate the input
             if (currentPlayer == RED) {
                 // long startTime = System.currentTimeMillis();
-                col = bot(1, 1);
+                col = bot(1, bot2);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
                 // long endTime = System.currentTimeMillis();
                 // System.out.println("Time taken: " + (endTime - startTime) + "ms");
             } else if (currentPlayer == YELLOW) {
-                col = bot(2, 0);
+                col = bot(2, bot1);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
             } else {
@@ -235,13 +235,15 @@ public class Connect4 {
         } while ((row < 0 || this.checkAlignment(row, col) == NONE) && turns < 42);
         //this.printScreen();
         //System.out.printf("\n!!! Winner is Player '%c' !!!\n", currentPlayer);
-        if (currentPlayer == YELLOW) {
-            //learn(moves, board, RESULTS.LOSS, false, 1);
-            Connect4.count++;
-        }
-        if (currentPlayer == RED) {
-            //learn(moves, board, RESULTS.LOSS, false, 2);
-        }
+        if (turns < 42) {
+            if (currentPlayer == YELLOW) {
+                //learn(moves, board, RESULTS.LOSS, false, 1);
+                Connect4.count++;
+            }
+            if (currentPlayer == RED) {
+                //learn(moves, board, RESULTS.LOSS, false, 2);
+            }
+        } else draws++;
         //   writeHere();
     }
 
@@ -322,19 +324,28 @@ public class Connect4 {
 
     public static int count;
 
+    public static int draws;
+
+    private static int treeBot = 1;
+
+    private static int recBot = 0;
+
     public static void main(String[] args) throws IOException {
         count = 0;
+        draws = 0;
+        double total = 0;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 150; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
-            connect4.play();
-            System.out.println("Finished game: " + (i + 1));
+            connect4.play(recBot, treeBot);
+            System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
             long endTimeGame = System.currentTimeMillis();
             System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Time taken: " + (endTime - startTime) + "ms");
         System.out.println("Yellow wins:" + count);
+        System.out.println("Draws:" + draws);
     }
 }

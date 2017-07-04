@@ -4,8 +4,11 @@
 public class Winner {
     // Check rows, if there are 4 or more disks of the same color - return winner color
     Field mField;
+
     char[][] field;
+
     int rows;
+
     int cols;
 
     Winner(Field mfield) {
@@ -58,7 +61,6 @@ public class Winner {
             if ((column + 1 + i) < cols && field[row][column + i + 1] == checker) {
                 countFour++;
             } else break;
-
         }
         if (countFour >= 3) return checker;
 
@@ -75,7 +77,6 @@ public class Winner {
             if ((row - i - 1) >= 0 && field[row - i - 1][column] == checker) {
                 countFour++;
             } else break;
-
         }
         if (countFour >= 3) {
             return checker;
@@ -95,7 +96,6 @@ public class Winner {
             if ((((row + i + 1) < rows) && (column - 1 - i) >= 0) && (field[row + i + 1][column - 1 - i] == checker)) {
                 // diagonal checking ( down left )
                 countFour++;
-
             } else {
                 break;
             }
@@ -104,14 +104,12 @@ public class Winner {
             return checker;
         }
 
-
         countFour = 0;
 
         for (int i = 0; i < 3; i++) {
             if (((row - i - 1) >= 0 && (column - 1 - i) >= 0) &&
                     (field[row - i - 1][column - 1 - i] == checker)) { // diagonal checking ( up left )
                 countFour++;
-
             } else {
                 break;
             }
@@ -121,7 +119,6 @@ public class Winner {
                     (field[row + i + 1][column + 1 + i] == checker)) {
                 // diagonal checking ( down right )
                 countFour++;
-
             } else {
                 break;
             }
@@ -130,6 +127,107 @@ public class Winner {
             return checker;
         }
         return ' ';
+    }
+
+    public int checkAlignment2(int row, int column) {
+        int countFour = 1;
+        int score = 0;
+        int total = 0;
+        char checker = field[row][column];
+        if (checker == ' ') return 0;
+
+        for (int i = 0; i < 3; i++) { // horizontal checking ( left )
+            if ((column - 1 - i) >= 0 && field[row][column - i - 1] == checker) {
+                countFour++;
+            } else if ((column - 1 - i) >= 0 && field[row][column - i - 1] == ' ') {
+                score++;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) { // horizontal checking ( right )
+            if ((column + 1 + i) < cols && field[row][column + i + 1] == checker) {
+                countFour++;
+            } else if ((column + 1 + i) < cols && field[row][column + i + 1] == ' ') {
+                score++;
+            } else break;
+        }
+        total += countFour * score;
+        countFour = 1;
+        score = 0;
+        // vertical checking ( down )
+        for (int i = 0; i < 3; i++) {
+            if ((row + i + 1) < rows && field[row + i + 1][column] == checker) {
+                countFour++;
+            } else if ((row + i + 1) < rows && field[row + i + 1][column] == ' ') {
+                score++;
+            } else break;
+        }
+        //vertical up
+        for (int i = 0; i < 3; i++) {
+            if ((row - i - 1) >= 0 && field[row - i - 1][column] == checker) {
+                countFour++;
+            }
+            if ((row - i - 1) >= 0 && field[row - i - 1][column] == ' ') {
+                score++;
+            } else break;
+        }
+        total += countFour * score;
+        countFour = 1;
+        score = 0;
+        for (int i = 0; i < 3; i++) {
+            if (((row - i - 1) >= 0 && (column + 1 + i) < cols) &&
+                    (field[row - i - 1][column + 1 + i] == checker)) { // diagonal checking ( up right )
+                countFour++;
+            } else if (((row - i - 1) >= 0 && (column + 1 + i) < cols) &&
+                    (field[row - i - 1][column + 1 + i] == ' ')) { // diagonal checking ( up right )
+                score++;
+            } else {
+                break;
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            if ((((row + i + 1) < rows) && (column - 1 - i) >= 0) && (field[row + i + 1][column - 1 - i] == checker)) {
+                // diagonal checking ( down left )
+                countFour++;
+            } else if ((((row + i + 1) < rows)
+                    && (column - 1 - i) >= 0)
+                    && (field[row + i + 1][column - 1 - i] == ' ')) {
+                // diagonal checking ( down left )
+                score++;
+            } else {
+                break;
+            }
+        }
+        total += countFour * score;
+        countFour = 1;
+        score = 0;
+        for (int i = 0; i < 3; i++) {
+            if (((row - i - 1) >= 0 && (column - 1 - i) >= 0) &&
+                    (field[row - i - 1][column - 1 - i] == checker)) { // diagonal checking ( up left )
+                countFour++;
+            } else if (((row - i - 1) >= 0 && (column - 1 - i) >= 0) &&
+                    (field[row - i - 1][column - 1 - i] == ' ')) { // diagonal checking ( up left )
+                score++;
+            } else {
+                break;
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            if ((((row + i + 1) < rows) && (column + 1 + i) < cols) &&
+                    (field[row + i + 1][column + 1 + i] == checker)) {
+                // diagonal checking ( down right )
+                countFour++;
+            } else if (((row - i - 1) >= 0 && (column - 1 - i) >= 0) &&
+                    (field[row - i - 1][column - 1 - i] == ' ')) { // diagonal checking ( up left )
+                score++;
+            } else {
+                break;
+            }
+        }
+        total += countFour * score;
+        return total;
     }
 
     public void printScreen() {
@@ -158,6 +256,4 @@ public class Winner {
             System.out.println("-");
         }
     }
-
-
 }
