@@ -131,7 +131,7 @@ public class Winner {
 
     public int checkAlignment2(int row, int column) {
         int countFour = 1;
-        int score = 0;
+        int score = 1;
         int total = 0;
         char checker = field[row][column];
         if (checker == ' ') return 0;
@@ -155,7 +155,7 @@ public class Winner {
         }
         total += countFour * score;
         countFour = 1;
-        score = 0;
+        score = 1;
         // vertical checking ( down )
         for (int i = 0; i < 3; i++) {
             if ((row + i + 1) < rows && field[row + i + 1][column] == checker) {
@@ -175,7 +175,7 @@ public class Winner {
         }
         total += countFour * score;
         countFour = 1;
-        score = 0;
+        score = 1;
         for (int i = 0; i < 3; i++) {
             if (((row - i - 1) >= 0 && (column + 1 + i) < cols) &&
                     (field[row - i - 1][column + 1 + i] == checker)) { // diagonal checking ( up right )
@@ -202,7 +202,7 @@ public class Winner {
         }
         total += countFour * score;
         countFour = 1;
-        score = 0;
+        score = 1;
         for (int i = 0; i < 3; i++) {
             if (((row - i - 1) >= 0 && (column - 1 - i) >= 0) &&
                     (field[row - i - 1][column - 1 - i] == checker)) { // diagonal checking ( up left )

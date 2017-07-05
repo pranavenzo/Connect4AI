@@ -32,9 +32,9 @@ public class BotStarter {
 
     HashMap<Integer, List<Integer>> alphaMap;
 
-    int MAX_DEPTH = 7;
+    int MAX_DEPTH = 9;
 
-    int max_depth = 7;
+    int max_depth = 9;
 
     Map<String, List<Integer>> banned;
 
@@ -256,12 +256,12 @@ public class BotStarter {
                 Field childField = new Field(nextOne.getField());
                 if (childField.addDisc(i, childPlayer)) {
                     GameNode child = new GameNode(childField, nextOne, i, player);
-                    /*GameNode longLostChild = reverseMap.get(child.toString());
+                    GameNode longLostChild = reverseMap.get(child.toString());
                     if (longLostChild != null) {
                         GameNode fake = new GameNode(longLostChild, i, nextOne);
                         fake.passAlphaOrBetaValueUp(); //ghost child creation
                         continue;
-                    }*/
+                    }
                     reverseMap.put(child.toString(), child);
                     child.checkWinner(i, childPlayer);
                     if (child.getScore() == 0) child.setScore();

@@ -142,7 +142,7 @@ public class GameNode {
     }
 
     public void setScore() {
-        this.score = newEval();
+        this.score = evaluationFunction();
     }
 
     public void checkWinner(int col, int myBot) {

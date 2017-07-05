@@ -233,9 +233,9 @@ public class Connect4 {
             }
             turns++;
         } while ((row < 0 || this.checkAlignment(row, col) == NONE) && turns < 42);
-        //this.printScreen();
-        //System.out.printf("\n!!! Winner is Player '%c' !!!\n", currentPlayer);
-        if (turns < 42) {
+        /*this.printScreen();
+        System.out.printf("\n!!! Winner is Player '%c' !!!\n", currentPlayer);
+        */if (turns < 42) {
             if (currentPlayer == YELLOW) {
                 //learn(moves, board, RESULTS.LOSS, false, 1);
                 Connect4.count++;
@@ -335,10 +335,14 @@ public class Connect4 {
         draws = 0;
         double total = 0;
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < 100; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
-            connect4.play(recBot, treeBot);
+            try {
+                connect4.play(treeBot, recBot);
+            } catch (Exception e) {
+                System.out.println("Game: " + (i + 1) + "\nFailed");
+            }
             System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
             long endTimeGame = System.currentTimeMillis();
             System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
