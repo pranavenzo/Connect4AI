@@ -322,8 +322,8 @@ public class Connect4 {
         ret = ret.substring(0, ret.length() - 1);
         Field field = new Field(columns, rows);
         field.parseFromString(ret);
-        BotStarter botStarter = new BotStarter();
-        return botStarter.makeTurn(field, player, banned, botNum);
+        BotStarter botStarter = botNum == 1 ? new TreeBot() : new BotStarter();
+        return botStarter.makeTurn(field, player, banned);
     }
 
     public static int count;
@@ -340,14 +340,13 @@ public class Connect4 {
         count = 0;
         draws = 0;
         failed = 0;
-        System.out.println("LLC recBot 1");
         long startTime = System.currentTimeMillis();
-        final int totalGames = 100;
+        final int totalGames = 10;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(recBot, treeBot, false, false, false);
+                connect4.play(treeBot, treeBot, true, false, true);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

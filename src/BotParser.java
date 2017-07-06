@@ -69,7 +69,7 @@ public class BotParser {
                 }
             } else if (parts[0].equals("action")) {
                 if (parts[1].equals("move")) { /* move requested */
-                    int column = bot.makeTurn(mField, mBotId, null,0);
+                    int column = bot.makeTurn(mField, mBotId, null);
                     System.out.println("place_disc " + column);
                 }
             } else {
