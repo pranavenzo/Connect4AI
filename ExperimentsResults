@@ -1,0 +1,28 @@
+--------------------------------------------
+TreeBot(9e1) vs RecBot(9e1) 100 5 0 ID LLC
+RecBot(9e1) vs TreeBot(9e1) 100 94 0 ID LLC
+Conclusion: LLC not working
+--------------------------------------------
+TreeBot(9e1) vs RecBot(9e1) 100 78 2 ID
+RecBot(9e1) vs TreeBot(9e1) 100 48 5 ID
+Conclusion: New bot > Old bot with e1
+--------------------------------------------
+TreeBot(9ne) vs RecBot(9e1) 100 77 0 ID
+RecBot(9e1) vs TreeBot(9ne) 100 0 0 ID
+TreeBot(9ne) vs RecBot(9e1) 100 80 0 ID
+RecBot(9e1) vs TreeBot(9ne) 100 0 0 ID
+Conclusion: New bot >> Old bot with ne
+--------------------------------------------
+Divya Natrajan vs TreeBot(9ne) 2 0 0 ID
+TreeBot(9ne) vs Divya Natrajan 2 2 0 ID
+Conclusion: The above experimental results
+seem to be valid.
+--------------------------------------------
+TreeBot(9ne) vs RecBot(9e1) 100 0 0 ID + LLC2
+RecBot(9e1) vs TreeBot(9ne) 100 73 0 ID + LLC2
+Conclusion: LLC2 not working
+--------------------------------------------
+TreeBot(9ne) vs RecBot(9e1) 100 87 0 ID
+RecBot(9e1) vs TreeBot(9ne) 100 0 0 ID
+Conclusion: Problem was definately LLC2
+--------------------------------------------

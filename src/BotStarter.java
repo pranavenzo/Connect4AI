@@ -256,10 +256,10 @@ public class BotStarter {
                 Field childField = new Field(nextOne.getField());
                 if (childField.addDisc(i, childPlayer)) {
                     GameNode child = new GameNode(childField, nextOne, i, player);
+
                     GameNode longLostChild = reverseMap.get(child.toString());
                     if (longLostChild != null) {
-                        GameNode fake = new GameNode(longLostChild, i, nextOne);
-                        fake.passAlphaOrBetaValueUp(); //ghost child creation
+                        longLostChild.passAlphaOrBetaValueUp(nextOne);
                         continue;
                     }
                     reverseMap.put(child.toString(), child);

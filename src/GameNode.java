@@ -103,7 +103,7 @@ public class GameNode {
         else this.beta = keyValue;
     }
 
-    public void passAlphaOrBetaValueUp() {
+    public void passAlphaOrBetaValueUp(GameNode parent) {
         if (parent != null) {
             if (parent.getKey() < this.getKey() && !isMaximizer) {
                 parent.setKey(this.getKey());
@@ -113,6 +113,10 @@ public class GameNode {
                 parent.bestChild = this;
             }
         }
+    }
+
+    public void passAlphaOrBetaValueUp() {
+        this.passAlphaOrBetaValueUp(this.parent);
     }
 
     public Field getField() {
@@ -142,7 +146,7 @@ public class GameNode {
     }
 
     public void setScore() {
-        this.score = evaluationFunction();
+        this.score = newEval();
     }
 
     public void checkWinner(int col, int myBot) {
