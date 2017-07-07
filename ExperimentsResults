@@ -1,3 +1,4 @@
+Bot1 vs Bot2 Total Games Bot1Wins Draws Features
 --------------------------------------------
 TreeBot(9e1) vs RecBot(9e1) 100 5 0 ID LLC
 RecBot(9e1) vs TreeBot(9e1) 100 94 0 ID LLC
@@ -24,5 +25,10 @@ Conclusion: LLC2 not working
 --------------------------------------------
 TreeBot(9ne) vs RecBot(9e1) 100 87 0 ID
 RecBot(9e1) vs TreeBot(9ne) 100 0 0 ID
-Conclusion: Problem was definately LLC2
+Conclusion: Problem was definitely LLC2
 --------------------------------------------
+TreeBot(8ne) vs RecBot(9e1) 100 72 2 ID
+RecBot(9e1) vs TreeBot(8ne) 100 30 5 ID
+--------------------------------------------
+RecBot(9e1) vs TreeBot(8ne) 20 10 1 ID + LLC3
+TreeBot(8ne) vs RecBot(9e1) 20 0 0 ID + LLC3

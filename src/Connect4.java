@@ -205,16 +205,23 @@ public class Connect4 {
             }
             // read and validate the input
             if (currentPlayer == RED & !human2) {
-                // long startTime = System.currentTimeMillis();
+                long startTime = System.currentTimeMillis();
                 col = bot(1, bot2);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
-                // long endTime = System.currentTimeMillis();
-                // System.out.println("Time taken: " + (endTime - startTime) + "ms");
+                if (print) {
+                    long endTime = System.currentTimeMillis();
+                    System.out.println("Time taken: " + (endTime - startTime) + "ms");
+                }
             } else if (currentPlayer == YELLOW & !human1) {
+                long startTime = System.currentTimeMillis();
                 col = bot(2, bot1);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
+                if (print) {
+                    long endTime = System.currentTimeMillis();
+                    System.out.println("Time taken: " + (endTime - startTime) + "ms");
+                }
             } else {
                 col = -1;
                 row = -1;
@@ -323,7 +330,7 @@ public class Connect4 {
         Field field = new Field(columns, rows);
         field.parseFromString(ret);
         BotStarter botStarter = botNum == 1 ? new TreeBot() : new BotStarter();
-        return botStarter.makeTurn(field, player, banned);
+        return botStarter.makeTurn(field, player, banned, Long.MAX_VALUE);
     }
 
     public static int count;
@@ -341,12 +348,12 @@ public class Connect4 {
         draws = 0;
         failed = 0;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 10;
+        final int totalGames = 20;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(treeBot, treeBot, true, false, true);
+                connect4.play(treeBot, recBot, true, false, true);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

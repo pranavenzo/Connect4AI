@@ -3,12 +3,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by anappp on 7/6/17.
- */
 public class TreeBot extends BotStarter {
+    private long start;
+
+    private long time;
+
     @Override
-    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned) {
+    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
+        this.time = time;
+        this.start = System.currentTimeMillis();
         this.banned = banned;
         alphaMap = new HashMap<>();
         this.field = mfield;
@@ -68,16 +71,14 @@ public class TreeBot extends BotStarter {
                 } else childPlayer = this.player;
                 Field childField = new Field(nextOne.getField());
                 if (childField.addDisc(i, childPlayer)) {
-                    GameNode child = new GameNode(childField, nextOne, i, player);
-
-                    /*GameNode longLostChild = reverseMap.get(child.toString());
-                    if (longLostChild != null) {
-                        longLostChild.passAlphaOrBetaValueUp(nextOne);
+                    GameNode c = reverseMap.get(childField.toString());
+                    if (nextOne.pullAlphaOrBetaDown(c)) {
                         continue;
-                    }*/
-                    reverseMap.put(child.toString(), child);
+                    }
+                    GameNode child = new GameNode(childField, nextOne, i, player);
                     child.checkWinner(i, childPlayer);
                     if (child.getScore() == 0) child.setScore();
+                    reverseMap.put(child.toString(), child);
                     nextOne.addChild(i, child);
                     unexploredChildren.put(nextOne.toString(), unexploredChildren.get(nextOne.toString()) + 1);
                 }

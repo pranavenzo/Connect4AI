@@ -115,6 +115,20 @@ public class GameNode {
         }
     }
 
+    public boolean pullAlphaOrBetaDown(GameNode child) {
+        if (child != null) {
+            if (isMaximizer && this.alpha < child.beta) {
+                this.alpha = child.beta;
+                this.bestChild = child;
+            } else if (!isMaximizer && this.beta > child.alpha) {
+                this.beta = child.alpha;
+                this.bestChild = child;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public void passAlphaOrBetaValueUp() {
         this.passAlphaOrBetaValueUp(this.parent);
     }

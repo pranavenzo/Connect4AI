@@ -34,7 +34,7 @@ public class BotStarter {
 
     int MAX_DEPTH = 9;
 
-    int max_depth = 9;
+    int max_depth = 8;
 
     Map<String, List<Integer>> banned;
 
@@ -45,7 +45,7 @@ public class BotStarter {
      *
      * @return The column where the turn was made.
      */
-    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned) {
+    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
         this.banned = banned;
         alphaMap = new HashMap<>();
         this.field = mfield;

@@ -15,7 +15,6 @@
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
-
 import java.util.Scanner;
 
 /**
@@ -26,15 +25,14 @@ import java.util.Scanner;
  *
  * @author Jim van Eeden <jim@starapple.nl>, Joost de Meij <joost@starapple.nl>
  */
-
 public class BotParser {
-
     final Scanner scan;
+
     final BotStarter bot;
 
     private Field mField;
-    public static int mBotId = 0;
 
+    public static int mBotId = 0;
 
     public BotParser(BotStarter bot) {
         this.scan = new Scanner(System.in);
@@ -69,7 +67,12 @@ public class BotParser {
                 }
             } else if (parts[0].equals("action")) {
                 if (parts[1].equals("move")) { /* move requested */
-                    int column = bot.makeTurn(mField, mBotId, null);
+                    long time = -1;
+                    try {
+                        time = Long.parseLong(parts[2]);
+                    } catch (Exception ignored) {
+                    }
+                    int column = bot.makeTurn(mField, mBotId, null, time);
                     System.out.println("place_disc " + column);
                 }
             } else {
