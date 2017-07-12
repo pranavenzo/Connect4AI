@@ -350,12 +350,12 @@ public class Connect4 {
         failed = 0;
         boolean isDebug = false;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 1;
+        final int totalGames = 10;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(treeBot, recBot, true, false, false);
+                connect4.play(treeBot, recBot, false, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

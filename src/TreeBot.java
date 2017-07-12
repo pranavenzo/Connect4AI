@@ -23,6 +23,18 @@ public class TreeBot implements Bot {
     TreeBot() {
     }
 
+    private void setMax_depth() {
+        /*int full = 0;
+        for (int i = 0; i < field.getNrColumns(); i++) {
+            if (field.isColumnFull(i)) full++;
+        }
+        max_depth = 8 + full;*/
+    }
+
+    private int getMax_depth() {
+        return max_depth;
+    }
+
     @Override
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
         this.time = time;
@@ -30,6 +42,7 @@ public class TreeBot implements Bot {
         this.banned = banned;
         this.field = mfield;
         this.player = player;
+        setMax_depth();
         return treePrune(field);
     }
 
@@ -65,7 +78,7 @@ public class TreeBot implements Bot {
                 cascadeAlphaBeta(nextOne);
                 continue;
             }
-            if (nextOne.level == max_depth || nextOne.isFull()) {
+            if (nextOne.level == getMax_depth() || nextOne.isFull()) {
                 nextOne.setScore();
                 nextOne.setLeaf();
                 nextOne.passAlphaOrBetaValueUp();
