@@ -3,17 +3,31 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class TreeBot extends BotStarter {
+public class TreeBot implements Bot {
     private long start;
 
     private long time;
+
+    private Map<String, Integer> unexploredChildren;
+
+    private Map<String, GameNode> reverseMap;
+
+    private Field field;
+
+    private int player;
+
+    int max_depth = 8;
+
+    private Map<String, List<Integer>> banned;
+
+    TreeBot() {
+    }
 
     @Override
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
         this.time = time;
         this.start = System.currentTimeMillis();
         this.banned = banned;
-        alphaMap = new HashMap<>();
         this.field = mfield;
         this.player = player;
         return treePrune(field);
@@ -33,10 +47,10 @@ public class TreeBot extends BotStarter {
     }
 
     private int treePrune(Field field) {
-        GameNode gameNode = new GameNode(field);
-        LinkedList<GameNode> queue = new LinkedList<>();
+        reverseMap = new HashMap<>();
         unexploredChildren = new HashMap<>();
-        Map<String, GameNode> reverseMap = new HashMap<>();
+        GameNode gameNode = new GameNode(field, this.player);
+        LinkedList<GameNode> queue = new LinkedList<>();
         reverseMap.put(gameNode.toString(), gameNode);
         queue.add(gameNode);
         while (!queue.isEmpty()) {
@@ -71,10 +85,12 @@ public class TreeBot extends BotStarter {
                 } else childPlayer = this.player;
                 Field childField = new Field(nextOne.getField());
                 if (childField.addDisc(i, childPlayer)) {
-                    GameNode c = reverseMap.get(childField.toString());
-                    if (nextOne.pullAlphaOrBetaDown(c)) {
+                    /*GameNode c = reverseMap.get(childField.toString());
+                    if (unexploredChildren.get(childField.toString()) != null
+                            && unexploredChildren.get(childField.toString()) == 0
+                            && nextOne.pullAlphaOrBetaDown(c)) {
                         continue;
-                    }
+                    }*/
                     GameNode child = new GameNode(childField, nextOne, i, player);
                     child.checkWinner(i, childPlayer);
                     if (child.getScore() == 0) child.setScore();

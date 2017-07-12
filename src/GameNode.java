@@ -29,7 +29,9 @@ public class GameNode {
 
     Winner winner;
 
-    GameNode(Field field) {
+    Double bestChildKey;
+
+    GameNode(Field field, int player) {
         winner = new Winner(field);
         this.field = field;
         movesMap = new HashMap<>();
@@ -40,6 +42,8 @@ public class GameNode {
         isMaximizer = true;
         this.level = 0;
         preMove = -1;
+        this.player = player;
+        bestChildKey = null;
     }
 
     public GameNode(GameNode gameNode, int preMove, GameNode parent) {
@@ -54,6 +58,7 @@ public class GameNode {
         this.player = gameNode.player;
         this.level = parent.level + 1;
         this.isMaximizer = !parent.isMaximizer;
+        bestChildKey = null;
     }
 
     GameNode(Field field, GameNode parent, int preMove, int player) {
@@ -69,6 +74,7 @@ public class GameNode {
         this.isMaximizer = !parent.isMaximizer;
         this.preMove = preMove;
         this.player = player;
+        bestChildKey = null;
     }
 
     public double getScore() {
@@ -105,23 +111,24 @@ public class GameNode {
 
     public void passAlphaOrBetaValueUp(GameNode parent) {
         if (parent != null) {
-            if (parent.getKey() < this.getKey() && !isMaximizer) {
+            if ((parent.getKey() < this.getKey() && !isMaximizer)
+                    || (parent.getKey() > this.getKey() && isMaximizer)) {
                 parent.setKey(this.getKey());
                 parent.bestChild = this;
-            } else if (parent.getKey() > this.getKey() && isMaximizer) {
-                parent.setKey(this.getKey());
-                parent.bestChild = this;
+                parent.bestChildKey = this.bestChildKey;
             }
         }
     }
 
     public boolean pullAlphaOrBetaDown(GameNode child) {
         if (child != null) {
-            if (isMaximizer && this.alpha < child.beta) {
-                this.alpha = child.beta;
-                this.bestChild = child;
-            } else if (!isMaximizer && this.beta > child.alpha) {
-                this.beta = child.alpha;
+            Double best = child.bestChildKey;
+            if (best == null) {
+                return false;
+            }
+            if ((this.getKey() < best && isMaximizer)
+                    || (this.getKey() > best && !isMaximizer)) {
+                this.setKey(best);
                 this.bestChild = child;
             }
             return true;
@@ -140,6 +147,7 @@ public class GameNode {
     public void setLeaf() {
         this.alpha = this.score;
         this.beta = this.score;
+        bestChildKey = this.score;
     }
 
     public boolean isMaximizer() {
@@ -161,6 +169,7 @@ public class GameNode {
 
     public void setScore() {
         this.score = newEval();
+        this.bestChildKey = this.score;
     }
 
     public void checkWinner(int col, int myBot) {

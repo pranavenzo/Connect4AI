@@ -25,7 +25,7 @@ import java.util.*;
  *
  * @author Jim van Eeden <jim@starapple.nl>, Joost de Meij <joost@starapple.nl>
  */
-public class BotStarter {
+public class BotStarter implements Bot {
     Field field;
 
     int player;
@@ -34,11 +34,7 @@ public class BotStarter {
 
     int MAX_DEPTH = 9;
 
-    int max_depth = 8;
-
     Map<String, List<Integer>> banned;
-
-    Map<String, Integer> unexploredChildren;
 
     /**
      * Makes a turn. Edit this method to make your bot smarter.
@@ -177,10 +173,6 @@ public class BotStarter {
         }
         return key;
     }
-
-    public static final double winner = 1000;
-
-    public static final double loser = -1000;
 
     private int evalFunction(Field pruneField) {
         Winner winner = new Winner(pruneField);

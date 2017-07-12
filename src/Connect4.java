@@ -197,6 +197,8 @@ public class Connect4 {
         Scanner in = new Scanner(System.in);
         int col = -1;
         int row = -1;
+        Bot botnum1 = bot1 == 1 ? new TreeBot() : new BotStarter();
+        Bot botnum2 = bot2 == 1 ? new TreeBot() : new BotStarter();
         do {
             currentPlayer = currentPlayer == RED ? YELLOW : RED;
             if (print) {
@@ -206,7 +208,7 @@ public class Connect4 {
             // read and validate the input
             if (currentPlayer == RED & !human2) {
                 long startTime = System.currentTimeMillis();
-                col = bot(1, bot2);
+                col = bot(botnum2, 1, bot2);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
                 if (print) {
@@ -215,7 +217,7 @@ public class Connect4 {
                 }
             } else if (currentPlayer == YELLOW & !human1) {
                 long startTime = System.currentTimeMillis();
-                col = bot(2, bot1);
+                col = bot(botnum1, 2, bot1);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
                 if (print) {
@@ -319,7 +321,7 @@ public class Connect4 {
         return board;
     }
 
-    private int bot(int player, int botNum) {
+    private int bot(Bot bot, int player, int botNum) {
         String ret = "";
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -329,8 +331,7 @@ public class Connect4 {
         ret = ret.substring(0, ret.length() - 1);
         Field field = new Field(columns, rows);
         field.parseFromString(ret);
-        BotStarter botStarter = botNum == 1 ? new TreeBot() : new BotStarter();
-        return botStarter.makeTurn(field, player, banned, Long.MAX_VALUE);
+        return bot.makeTurn(field, player, banned, Long.MAX_VALUE);
     }
 
     public static int count;
@@ -347,16 +348,18 @@ public class Connect4 {
         count = 0;
         draws = 0;
         failed = 0;
+        boolean isDebug = false;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 20;
+        final int totalGames = 1;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(treeBot, recBot, true, false, true);
+                connect4.play(treeBot, recBot, true, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;
+                if (isDebug) throw e;
             }
             System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
             long endTimeGame = System.currentTimeMillis();

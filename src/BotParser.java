@@ -28,13 +28,13 @@ import java.util.Scanner;
 public class BotParser {
     final Scanner scan;
 
-    final BotStarter bot;
+    final Bot bot;
 
     private Field mField;
 
     public static int mBotId = 0;
 
-    public BotParser(BotStarter bot) {
+    public BotParser(Bot bot) {
         this.scan = new Scanner(System.in);
         this.bot = bot;
     }
