@@ -32,7 +32,7 @@ public class BotStarter implements Bot {
 
     HashMap<Integer, List<Integer>> alphaMap;
 
-    int MAX_DEPTH = 9;
+    int MAX_DEPTH = 6;
 
     Map<String, List<Integer>> banned;
 
@@ -50,12 +50,12 @@ public class BotStarter implements Bot {
         List<Integer> moves = alphaMap.get(movee);
         if (moves == null) return (int) (Math.random() * (double) field.getNrColumns());
         Integer move;
-        move = moves.get((int) (Math.random() * moves.size()));
+        move = moves.get(0 * (int) (Math.random() * moves.size()));
         // System.out.println(calls);
         return move;
     }
 
-    private void fillMap() throws IOException {
+    private void fillMap() {
         try (BufferedReader br = new BufferedReader(new FileReader("experiences.txt"))) {
             String line = br.readLine();
             while (line != null) {
@@ -71,7 +71,7 @@ public class BotStarter implements Bot {
                 banned.put(params[0], list);
                 line = br.readLine();
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

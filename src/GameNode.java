@@ -172,6 +172,10 @@ public class GameNode {
         this.bestChildKey = this.score;
     }
 
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     public void checkWinner(int col, int myBot) {
         if (winner.isWinner(col, myBot)) {
             if (myBot == player) this.score = BotStarter.winner;

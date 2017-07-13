@@ -250,14 +250,14 @@ public class Connect4 {
         }
         if (turns < 42) {
             if (currentPlayer == YELLOW) {
-                // learn(moves, board, RESULTS.LOSS, false, 1);
+                learn(moves, board, RESULTS.LOSS, false, 1);
                 Connect4.count++;
             }
             if (currentPlayer == RED) {
-                //  learn(moves, board, RESULTS.LOSS, false, 2);
+                learn(moves, board, RESULTS.LOSS, false, 2);
             }
         } else draws++;
-        //writeHere();
+        writeHere();
     }
 
     private String serializeBoard(char[][] board) {
@@ -271,7 +271,7 @@ public class Connect4 {
     }
 
     private void writeHere() throws IOException {
-        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("experiences.txt"), false));
+        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("experiences.txt"), true));
         for (String keys : banned.keySet()) {
             writer.println(keys + " " + (Arrays.toString(banned.get(keys).toArray()).replaceAll(" ", "")));
         }
@@ -296,7 +296,7 @@ public class Connect4 {
                 field.parseFromString(serializeBoard(board));
                 int res = new BotStarter().makeTurn2(field, player);
                 Winner winner = new Winner(field);
-                winner.printScreen();
+                //winner.printScreen();
                 if (res > 0) {
                     String s = serializeBoard(board);
                     List<Integer> current = banned.get(s);
@@ -350,12 +350,12 @@ public class Connect4 {
         failed = 0;
         boolean isDebug = false;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 10;
+        final int totalGames = 1;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(treeBot, recBot, false, false, false);
+                connect4.play(treeBot, treeBot, true, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

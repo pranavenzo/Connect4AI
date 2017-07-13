@@ -25,7 +25,7 @@ public class Tool {
                 else if (field.getDisc(i, j) == 2) y++;
             }
         }
-        if (r > y) return 'Y';
+        if (r >= y) return 'Y';
         return 'R';
     }
 

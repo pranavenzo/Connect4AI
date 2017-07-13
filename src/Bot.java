@@ -7,5 +7,6 @@ import java.util.Map;
 public interface Bot {
     double winner = 1000;
     double loser = -1000;
+    double seen = -10000;
     int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time);
 }
