@@ -32,7 +32,7 @@ public class BotStarter implements Bot {
 
     HashMap<Integer, List<Integer>> alphaMap;
 
-    int MAX_DEPTH = 6;
+    int MAX_DEPTH = 9;
 
     Map<String, List<Integer>> banned;
 
@@ -50,7 +50,7 @@ public class BotStarter implements Bot {
         List<Integer> moves = alphaMap.get(movee);
         if (moves == null) return (int) (Math.random() * (double) field.getNrColumns());
         Integer move;
-        move = moves.get(0 * (int) (Math.random() * moves.size()));
+        move = moves.get((int) (Math.random() * moves.size()));
         // System.out.println(calls);
         return move;
     }
@@ -259,7 +259,7 @@ public class BotStarter implements Bot {
     }
 
     public static void main(String[] args) {
-        BotParser parser = new BotParser(new TreeBot());
+        BotParser parser = new BotParser(new TreeBot(true));
         parser.run();
     }
 }

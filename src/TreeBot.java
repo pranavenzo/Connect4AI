@@ -23,9 +23,11 @@ public class TreeBot implements Bot {
 
     static double maxAlpha;
 
-    TreeBot() {
+    private boolean x;
+
+    TreeBot(boolean x) {
+        this.x = x;
         banned = new HashMap<>();
-        fillMap();
     }
 
     private void setMax_depth() {
@@ -34,6 +36,10 @@ public class TreeBot implements Bot {
             if (field.isColumnFull(i)) full++;
         }
         max_depth = 8 + full;*/
+    }
+
+    public Map<String, List<Integer>> getBanned() {
+        return banned;
     }
 
     private void fillMap() {
@@ -85,6 +91,7 @@ public class TreeBot implements Bot {
         unexploredChildren.put(nextOne.parent.toString(),
                 unexploredChildren.get(nextOne.parent.toString()) - 1);
         while (nextOne.parent != null && unexploredChildren.get(nextOne.parent.toString()) == 0) {
+            reverseMap.put(nextOne.toString(), nextOne);
             nextOne = nextOne.parent;
             if (nextOne.parent == null) break;
             nextOne.passAlphaOrBetaValueUp();
@@ -106,7 +113,7 @@ public class TreeBot implements Bot {
             if (nextOne.parent != null) {
                 nextOne.syncAlphaOrBeta();
             }
-            if (nextOne.getScore() == winner || nextOne.getScore() == loser || nextOne.getScore() == seen) {
+            if (nextOne.getScore() == winner || nextOne.getScore() == loser) {
                 nextOne.setLeaf();
                 nextOne.passAlphaOrBetaValueUp();
                 cascadeAlphaBeta(nextOne);
@@ -131,22 +138,17 @@ public class TreeBot implements Bot {
                     childPlayer = 3 - this.player;
                 } else childPlayer = this.player;
                 Field childField = new Field(nextOne.getField());
-                List<Integer> x = banned.get(nextOne.toString());
                 if (childField.addDisc(i, childPlayer)) {
                     GameNode c = reverseMap.get(childField.toString());
-                    if (unexploredChildren.get(childField.toString()) != null
-                            && unexploredChildren.get(childField.toString()) == 0
-                            && nextOne.pullAlphaOrBetaDown(c)) {
-                        continue;
+                    if (x) {
+                        if (c != null) {
+                            nextOne.pullAlphaOrBetaDown(c);
+                            continue;
+                        }
                     }
                     GameNode child = new GameNode(childField, nextOne, i, player);
                     child.checkWinner(i, childPlayer);
                     if (child.getScore() == 0) child.setScore();
-
-                    if (x != null && x.contains(i)) {
-                        child.setScore(seen);
-                    }
-                    reverseMap.put(child.toString(), child);
                     nextOne.addChild(i, child);
                     unexploredChildren.put(nextOne.toString(), unexploredChildren.get(nextOne.toString()) + 1);
                 }
@@ -155,11 +157,11 @@ public class TreeBot implements Bot {
             queue.addAll(0, nextOne.getChildren());
         }
         //System.out.println(unexploredChildren.size());
-        if(gameNode.getBestChild() == null) {
-            for(GameNode c: gameNode.getChildren()) {
+        /*if (gameNode.getBestChild() == null) {
+            for (GameNode c : gameNode.getChildren()) {
                 c.passAlphaOrBetaValueUp();
             }
-        }
+        }*/
         return gameNode.getBestChild().preMove;
     }
 }

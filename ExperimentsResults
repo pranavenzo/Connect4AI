@@ -30,4 +30,6 @@ Conclusion: Problem was definitely LLC2
 TreeBot(8ne) vs RecBot(9e1) 100 72 2 ID
 RecBot(9e1) vs TreeBot(8ne) 100 30 5 ID
 --------------------------------------------
-TreeBot(8ne) vs RecBot(9e1) 40 7 0 ID + LLC3
+RecBot(9e1) vs TreeBot(8ne) 50 13 3 ID
+RecBot(9e1) vs TreeBot(8ne) 50 28 0 ID + LLC3
+--------------------------------------------

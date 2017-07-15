@@ -197,8 +197,8 @@ public class Connect4 {
         Scanner in = new Scanner(System.in);
         int col = -1;
         int row = -1;
-        Bot botnum1 = bot1 == 1 ? new TreeBot() : new BotStarter();
-        Bot botnum2 = bot2 == 1 ? new TreeBot() : new BotStarter();
+        Bot botnum1 = bot1 == recBot ? new BotStarter() : bot1 == treeBot ? new TreeBot(false) : new BestBot();
+        Bot botnum2 = bot2 == recBot ? new BotStarter() : bot1 == treeBot ? new TreeBot(false) : new BestBot();
         do {
             currentPlayer = currentPlayer == RED ? YELLOW : RED;
             if (print) {
@@ -250,11 +250,11 @@ public class Connect4 {
         }
         if (turns < 42) {
             if (currentPlayer == YELLOW) {
-                learn(moves, board, RESULTS.LOSS, false, 1);
+                //learn(moves, board, RESULTS.LOSS, false, 1);
                 Connect4.count++;
             }
             if (currentPlayer == RED) {
-                learn(moves, board, RESULTS.LOSS, false, 2);
+                // learn(moves, board, RESULTS.LOSS, false, 2);
             }
         } else draws++;
         writeHere();
@@ -271,7 +271,7 @@ public class Connect4 {
     }
 
     private void writeHere() throws IOException {
-        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("experiences.txt"), true));
+        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("experiences.txt"), false));
         for (String keys : banned.keySet()) {
             writer.println(keys + " " + (Arrays.toString(banned.get(keys).toArray()).replaceAll(" ", "")));
         }
@@ -296,8 +296,8 @@ public class Connect4 {
                 field.parseFromString(serializeBoard(board));
                 int res = new BotStarter().makeTurn2(field, player);
                 Winner winner = new Winner(field);
-                //winner.printScreen();
-                if (res > 0) {
+                winner.printScreen();
+                if (res > Bot.loser) {
                     String s = serializeBoard(board);
                     List<Integer> current = banned.get(s);
                     if (current == null) current = new LinkedList<>();
@@ -342,20 +342,22 @@ public class Connect4 {
 
     private static int treeBot = 1;
 
+    private static int bestBot = 2;
+
     private static int recBot = 0;
 
     public static void main(String[] args) throws IOException {
         count = 0;
         draws = 0;
         failed = 0;
-        boolean isDebug = false;
+        boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 1;
+        final int totalGames = 20;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(treeBot, treeBot, true, false, false);
+                connect4.play(bestBot, recBot, true, false, true);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;
