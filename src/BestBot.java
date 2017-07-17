@@ -36,7 +36,7 @@ public class BestBot implements Bot {
     }
 
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, boolean isLearn) {
-        //setMaxdepth(mfield);
+        setMaxdepth(mfield);
         visited = new HashMap<>();
         this.player = player;
         this.opponent = 3 - player;
@@ -78,7 +78,7 @@ public class BestBot implements Bot {
                     continue;
                 }
                 if (childField.isFull()) {
-                    int score = 0;
+                    int score = (int) Bot.draw;
                     ab = testAndSet(ab, new int[]{score, score, i, score}, isMaximizer, i);
                     continue;
                 }

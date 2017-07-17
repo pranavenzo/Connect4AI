@@ -260,7 +260,15 @@ public class Connect4 {
             if (currentPlayer == RED) {
                 learn(moves, board, RESULTS.LOSS, false, 2);
             }
-        } else draws++;
+        } else {
+            if (currentPlayer == YELLOW) {
+                learn(moves, board, RESULTS.LOSS, false, 1);
+            }
+            if (currentPlayer == RED) {
+                learn(moves, board, RESULTS.LOSS, false, 2);
+            }
+            draws++;
+        }
         writeHere();
     }
 
@@ -299,9 +307,9 @@ public class Connect4 {
                 Field field = new Field(columns, rows);
                 field.parseFromString(serializeBoard(board));
                 int res = new BestBot().makeTurn(field, player, null, 0, true);
-                /*Winner winner = new Winner(field);
+/*                Winner winner = new Winner(field);
                 winner.printScreen();*/
-                if (res > Bot.loser && !banned.containsKey(field.toString())) {
+                if ((res > Bot.loser && res != Bot.draw) && !banned.containsKey(field.toString())) {
                     String s = serializeBoard(board);
                     List<Integer> current = banned.getOrDefault(s, new LinkedList<>());
                     current.add(lastMove);
@@ -380,12 +388,12 @@ public class Connect4 {
         failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 2;
+        final int totalGames = 300;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(treeBot, bestBot, true, false, false);
+                connect4.play(bestBot, bestBot, false, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;
