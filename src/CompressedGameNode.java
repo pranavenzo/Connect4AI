@@ -3,9 +3,7 @@
  */
 public class CompressedGameNode {
     Field field;
-
     int score;
-
     int preMove;
 
     public CompressedGameNode(Field field, int score, int preMove) {

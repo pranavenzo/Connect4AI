@@ -32,7 +32,7 @@ public class BotStarter implements Bot {
 
     HashMap<Integer, List<Integer>> alphaMap;
 
-    int MAX_DEPTH = 9;
+    int MAX_DEPTH = 6;
 
     Map<String, List<Integer>> banned;
 
@@ -42,6 +42,7 @@ public class BotStarter implements Bot {
      * @return The column where the turn was made.
      */
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
+        calls = 0;
         this.banned = banned;
         alphaMap = new HashMap<>();
         this.field = mfield;
@@ -51,7 +52,7 @@ public class BotStarter implements Bot {
         if (moves == null) return (int) (Math.random() * (double) field.getNrColumns());
         Integer move;
         move = moves.get((int) (Math.random() * moves.size()));
-        // System.out.println(calls);
+        //System.out.println(calls);
         return move;
     }
 
@@ -117,7 +118,10 @@ public class BotStarter implements Bot {
         return ret;
     }
 
+    static int calls;
+
     public int prune(int depth, Field pruneField, int alpha, int beta, boolean isMaximizer) {
+        calls++;
         boolean isChanged = false;
         if (depth == 0) {
             int x = evalFunction(pruneField);

@@ -15,7 +15,7 @@ public class TreeBot implements Bot {
 
     private int player;
 
-    int max_depth = 8;
+    private int max_depth = 8;
 
     private Map<String, List<Integer>> banned;
 
@@ -100,7 +100,9 @@ public class TreeBot implements Bot {
         }
     }
 
+    static int calls;
     public int treePrune(Field field) {
+        calls = 0;
         reverseMap = new HashMap<>();
         unexploredChildren = new HashMap<>();
         GameNode gameNode = new GameNode(field, this.player);
@@ -108,6 +110,7 @@ public class TreeBot implements Bot {
         reverseMap.put(gameNode.toString(), gameNode);
         queue.add(gameNode);
         while (!queue.isEmpty()) {
+            calls++;
             GameNode nextOne = queue.removeFirst();
             unexploredChildren.put(nextOne.toString(), 0);
             if (nextOne.parent != null) {
@@ -139,13 +142,13 @@ public class TreeBot implements Bot {
                 } else childPlayer = this.player;
                 Field childField = new Field(nextOne.getField());
                 if (childField.addDisc(i, childPlayer)) {
-                    GameNode c = reverseMap.get(childField.toString());
+                   /* GameNode c = reverseMap.get(childField.toString());
                     if (x) {
                         if (c != null) {
                             nextOne.pullAlphaOrBetaDown(c);
                             continue;
                         }
-                    }
+                    }*/
                     GameNode child = new GameNode(childField, nextOne, i, player);
                     child.checkWinner(i, childPlayer);
                     if (child.getScore() == 0) child.setScore();
@@ -156,7 +159,7 @@ public class TreeBot implements Bot {
             nextOne.sortChildren();
             queue.addAll(0, nextOne.getChildren());
         }
-        //System.out.println(unexploredChildren.size());
+        //System.out.println(calls);
         /*if (gameNode.getBestChild() == null) {
             for (GameNode c : gameNode.getChildren()) {
                 c.passAlphaOrBetaValueUp();

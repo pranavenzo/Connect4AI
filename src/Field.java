@@ -47,6 +47,13 @@ public class Field {
         }
     }
 
+    Field(String field, int rows, int cols) {
+        mBoard = new int[rows][cols];
+        mCols = cols;
+        mRows = rows;
+        this.parseFromString(field);
+    }
+
     /**
      * Sets the number of columns (this clears the board)
      *

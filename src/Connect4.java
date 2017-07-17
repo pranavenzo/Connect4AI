@@ -1,25 +1,17 @@
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 public class Connect4 {
     public static final char NONE = ' ';
-
     public static final char RED = 'R';
-
     public static final char YELLOW = 'Y';
-
     char[][] board;
-
     int turns;
-
     int rows;
-
     int columns;
-
     Map<String, List<Integer>> banned;
+    Map<String, Integer> boardToMoveYellow;
+    Map<String, Integer> boardToMoveRed;
 
     /**
      * Initializes the instance variables.
@@ -35,6 +27,8 @@ public class Connect4 {
         }
         turns = 0;
         banned = new HashMap<>();
+        boardToMoveYellow = new HashMap<>();
+        boardToMoveRed = new HashMap<>();
     }
 
     /**
@@ -198,7 +192,7 @@ public class Connect4 {
         int col = -1;
         int row = -1;
         Bot botnum1 = bot1 == recBot ? new BotStarter() : bot1 == treeBot ? new TreeBot(false) : new BestBot();
-        Bot botnum2 = bot2 == recBot ? new BotStarter() : bot1 == treeBot ? new TreeBot(false) : new BestBot();
+        Bot botnum2 = bot2 == recBot ? new BotStarter() : bot2 == treeBot ? new TreeBot(false) : new BestBot();
         do {
             currentPlayer = currentPlayer == RED ? YELLOW : RED;
             if (print) {
@@ -209,6 +203,8 @@ public class Connect4 {
             if (currentPlayer == RED & !human2) {
                 long startTime = System.currentTimeMillis();
                 col = bot(botnum2, 1, bot2);
+                boardToMoveRed.put(serializeBoard(this.board), col);
+                System.out.print(col);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
                 if (print) {
@@ -218,7 +214,14 @@ public class Connect4 {
             } else if (currentPlayer == YELLOW & !human1) {
                 long startTime = System.currentTimeMillis();
                 col = bot(botnum1, 2, bot1);
-                row = this.putPiece(col, currentPlayer);
+                boardToMoveYellow.put(serializeBoard(this.board), col);
+                System.out.print(col);
+                try {
+                    row = this.putPiece(col, currentPlayer);
+                } catch (Exception e) {
+                    System.out.println(serializeBoard(this.board));
+                    throw e;
+                }
                 moves.add(col);
                 if (print) {
                     long endTime = System.currentTimeMillis();
@@ -248,13 +251,14 @@ public class Connect4 {
             this.printScreen();
             System.out.printf("\n!!! Winner is Player '%c' !!!\n", currentPlayer);
         }
+        myFileReader();
         if (turns < 42) {
             if (currentPlayer == YELLOW) {
-                //learn(moves, board, RESULTS.LOSS, false, 1);
+                learn(moves, board, RESULTS.LOSS, false, 1);
                 Connect4.count++;
             }
             if (currentPlayer == RED) {
-                // learn(moves, board, RESULTS.LOSS, false, 2);
+                learn(moves, board, RESULTS.LOSS, false, 2);
             }
         } else draws++;
         writeHere();
@@ -284,7 +288,7 @@ public class Connect4 {
         LOSS
     }
 
-    private void learn(List<Integer> moves, char[][] board, RESULTS result, boolean myMoveLast, int player) {
+    private void learn(List<Integer> moves, char[][] board, RESULTS result, boolean myMoveLast, int player) throws IOException {
         if (result == RESULTS.LOSS) {
             do {
                 if (moves.size() < 2) return;
@@ -295,12 +299,11 @@ public class Connect4 {
                 Field field = new Field(columns, rows);
                 field.parseFromString(serializeBoard(board));
                 int res = new BotStarter().makeTurn2(field, player);
-                Winner winner = new Winner(field);
-                winner.printScreen();
+                /*Winner winner = new Winner(field);
+                winner.printScreen();*/
                 if (res > Bot.loser) {
                     String s = serializeBoard(board);
-                    List<Integer> current = banned.get(s);
-                    if (current == null) current = new LinkedList<>();
+                    List<Integer> current = banned.getOrDefault(s, new LinkedList<>());
                     current.add(lastMove);
                     Set<Integer> ss = new HashSet<>(current);
                     current = new LinkedList<>(ss);
@@ -309,6 +312,36 @@ public class Connect4 {
                 }
             } while (true);
         }
+    }
+
+    private void myFileReader() throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader("experiences.txt"))) {
+            String line = br.readLine();
+            while (line != null) {
+                String params[] = line.split(" ");
+                List<Integer> list = toList(params[1]);
+                List<Integer> list1 = banned.get(params[0]);
+                if (list1 != null) {
+                    Set<Integer> s = new HashSet<>(list1);
+                    Set<Integer> s1 = new HashSet<>(list);
+                    s1.addAll(s);
+                    list = new LinkedList<>(s1);
+                }
+                banned.put(params[0], list);
+                line = br.readLine();
+            }
+            br.close();
+        }
+    }
+
+    private List<Integer> toList(String s) {
+        List<Integer> out = new LinkedList<>();
+        s = s.substring(1, s.length() - 1);
+        String[] chars = s.split(",");
+        for (String aChar : chars) {
+            out.add(Integer.parseInt(aChar));
+        }
+        return out;
     }
 
     private char[][] popPiece(char board[][], int col) {
@@ -335,15 +368,10 @@ public class Connect4 {
     }
 
     public static int count;
-
     public static int draws;
-
     public static int failed;
-
     private static int treeBot = 1;
-
     private static int bestBot = 2;
-
     private static int recBot = 0;
 
     public static void main(String[] args) throws IOException {
@@ -352,12 +380,12 @@ public class Connect4 {
         failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 20;
+        final int totalGames = 100;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(bestBot, recBot, true, false, true);
+                connect4.play(treeBot, bestBot, false, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

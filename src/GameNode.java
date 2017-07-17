@@ -2,33 +2,19 @@ import java.util.*;
 
 public class GameNode {
     int preMove;
-
     private Field field;
-
     Map<GameNode, Integer> movesMap;
-
     GameNode parent;
-
     private LinkedList<GameNode> children;
-
     GameNode bestChild;
-
     int numChildren;
-
     double alpha;
-
     double beta;
-
     private double score;
-
     int player;
-
     int level;
-
     private boolean isMaximizer;
-
     Winner winner;
-
     Double bestChildKey;
 
     GameNode(Field field, int player) {
@@ -199,7 +185,6 @@ public class GameNode {
     }
 
     private double evaluationFunction() {
-
         Field pruneField = this.field;
         Winner oppWinner = new Winner(pruneField);
         Winner winner = new Winner(pruneField);
