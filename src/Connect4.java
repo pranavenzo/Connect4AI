@@ -298,10 +298,10 @@ public class Connect4 {
                 board = popPiece(board, lastMove);
                 Field field = new Field(columns, rows);
                 field.parseFromString(serializeBoard(board));
-                int res = new BotStarter().makeTurn2(field, player);
+                int res = new BestBot().makeTurn(field, player, null, 0, true);
                 /*Winner winner = new Winner(field);
                 winner.printScreen();*/
-                if (res > Bot.loser) {
+                if (res > Bot.loser && !banned.containsKey(field.toString())) {
                     String s = serializeBoard(board);
                     List<Integer> current = banned.getOrDefault(s, new LinkedList<>());
                     current.add(lastMove);
@@ -380,12 +380,12 @@ public class Connect4 {
         failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 100;
+        final int totalGames = 2;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(treeBot, bestBot, false, false, false);
+                connect4.play(treeBot, bestBot, true, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

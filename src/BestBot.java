@@ -32,6 +32,10 @@ public class BestBot implements Bot {
 
     @Override
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
+        return this.makeTurn(mfield, player, banned, time, false);
+    }
+
+    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, boolean isLearn) {
         //setMaxdepth(mfield);
         visited = new HashMap<>();
         this.player = player;
@@ -40,7 +44,10 @@ public class BestBot implements Bot {
         int[] defAb = new int[]{Integer.MIN_VALUE, Integer.MAX_VALUE, -1, -1};
         int[] ret = prune(defAb, mfield, true, 0);
         //System.out.println(calls);
-        return ret[bestMove];
+        if (!isLearn) {
+            return ret[bestMove];
+        }
+        return ret[alpha];
     }
 
     static int calls;
