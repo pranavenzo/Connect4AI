@@ -2,21 +2,30 @@ import java.io.*;
 import java.util.*;
 
 public class Connect4 {
-    public static final char NONE = ' ';
-    public static final char RED = 'R';
-    public static final char YELLOW = 'Y';
-    char[][] board;
-    int turns;
-    int rows;
-    int columns;
-    Map<String, List<Integer>> banned;
-    Map<String, Integer> boardToMoveYellow;
-    Map<String, Integer> boardToMoveRed;
+    private static final char NONE = ' ';
+
+    private static final char RED = 'R';
+
+    private static final char YELLOW = 'Y';
+
+    private char[][] board;
+
+    private int turns;
+
+    private int rows;
+
+    private int columns;
+
+    private Map<String, List<Integer>> banned;
+
+    private Map<String, Integer> boardToMoveYellow;
+
+    private Map<String, Integer> boardToMoveRed;
 
     /**
      * Initializes the instance variables.
      */
-    public Connect4() {
+    private Connect4() {
         rows = 6;
         columns = 7;
         board = new char[rows][columns];
@@ -39,9 +48,7 @@ public class Connect4 {
     public char[][] getBoard() {
         char[][] copy = new char[rows][columns];
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                copy[i][j] = board[i][j];
-            }
+            System.arraycopy(board[i], 0, copy[i], 0, columns);
         }
         return copy;
     }
@@ -54,7 +61,7 @@ public class Connect4 {
      * @param column a column of the board
      * @param color  RED or YELLOW
      */
-    public int putPiece(int column, char color) {
+    private int putPiece(int column, char color) {
         if (board[0][column] != NONE) return -1;
         int i;
         for (i = 0; i < rows; i++) {
@@ -74,7 +81,7 @@ public class Connect4 {
     /**
      * Print the screen in the standard output
      */
-    public void printScreen() {
+    private void printScreen() {
         // Make the header of the board
         System.out.printf("\n ");
         for (int i = 0; i < board[0].length; ++i)
@@ -105,7 +112,7 @@ public class Connect4 {
      * @param column
      * @return the color if there is an alignment, NONE otherwise.
      */
-    public char checkAlignment(int row, int column) {
+    private char checkAlignment(int row, int column) {
         int countFour = 0;
         char checker = board[row][column];
         for (int i = 0; i < 3; i++) { // horizontal checking ( left )
@@ -184,7 +191,7 @@ public class Connect4 {
     /**
      * Launch the game for one game.
      */
-    public void play(int bot1, int bot2, boolean print, boolean human1, boolean human2) throws IOException {
+    private void play(int bot1, int bot2, boolean print, boolean human1, boolean human2) throws IOException {
         List<Integer> moves = new LinkedList<>();
         char currentPlayer = RED;
         // Begin playing the game
@@ -254,18 +261,18 @@ public class Connect4 {
         myFileReader();
         if (turns < 42) {
             if (currentPlayer == YELLOW) {
-                learn(moves, board, RESULTS.LOSS, false, 1);
+                learn(moves, board, RESULTS.LOSS, 1);
                 Connect4.count++;
             }
             if (currentPlayer == RED) {
-                learn(moves, board, RESULTS.LOSS, false, 2);
+                learn(moves, board, RESULTS.LOSS, 2);
             }
         } else {
             if (currentPlayer == YELLOW) {
-                learn(moves, board, RESULTS.LOSS, false, 1);
+                learn(moves, board, RESULTS.LOSS, 1);
             }
             if (currentPlayer == RED) {
-                learn(moves, board, RESULTS.LOSS, false, 2);
+                learn(moves, board, RESULTS.LOSS, 2);
             }
             draws++;
         }
@@ -296,7 +303,7 @@ public class Connect4 {
         LOSS
     }
 
-    private void learn(List<Integer> moves, char[][] board, RESULTS result, boolean myMoveLast, int player) throws IOException {
+    private void learn(List<Integer> moves, char[][] board, RESULTS result, int player) throws IOException {
         if (result == RESULTS.LOSS) {
             do {
                 if (moves.size() < 2) return;
@@ -363,37 +370,40 @@ public class Connect4 {
     }
 
     private int bot(Bot bot, int player, int botNum) {
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                ret = ret + (board[i][j] == ' ' ? "0" : board[i][j] == 'R' ? "1" : "2") + ",";
+                ret.append(board[i][j] == ' ' ? "0" : board[i][j] == 'R' ? "1" : "2").append(",");
             }
         }
-        ret = ret.substring(0, ret.length() - 1);
+        ret = new StringBuilder(ret.substring(0, ret.length() - 1));
         Field field = new Field(columns, rows);
-        field.parseFromString(ret);
+        field.parseFromString(ret.toString());
         return bot.makeTurn(field, player, banned, Long.MAX_VALUE);
     }
 
     private static int count;
+
     private static int draws;
-    private static int failed;
-    private static int treeBot = 1;
-    private static int bestBot = 2;
-    private static int recBot = 0;
+
+    private static final int treeBot = 1;
+
+    private static final int bestBot = 2;
+
+    private static final int recBot = 0;
 
     public static void main(String[] args) throws IOException {
         count = 0;
         draws = 0;
-        failed = 0;
+        int failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 200;
+        final int totalGames = 2;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(bestBot, bestBot, false  , false, false);
+                connect4.play(bestBot, bestBot, false, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

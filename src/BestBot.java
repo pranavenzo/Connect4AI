@@ -7,13 +7,21 @@ import java.util.*;
  */
 public class BestBot implements Bot {
     private int player;
+
     private int opponent;
+
     private Map<String, int[]> visited;
+
     private final int alpha = 0;
+
     private final int beta = 1;
+
     private final int bestMove = 2;
+
     private final int bestChild = 3;
+
     private int maxDepth;
+
     private Map<String, List<Integer>> myMoves;
 
     BestBot() {
@@ -55,11 +63,12 @@ public class BestBot implements Bot {
     private int[] prune(int[] ab, Field field, boolean isMaximizer, int level) {
         calls++;
         int[] par = dup(ab);
+        int myTurn = isMaximizer ? player : opponent;
         if (level == maxDepth) {
             int score = newEval(field);
             return new int[]{score, score, -1, score};
         }
-        int myTurn = isMaximizer ? player : opponent;
+
         List<CompressedGameNode> kids = new LinkedList<>();
         for (int i = 0; i < field.getNrColumns(); i++) {
             if (myMoves.getOrDefault(field.toString(), new LinkedList<>()).contains(i)) {
@@ -153,6 +162,30 @@ public class BestBot implements Bot {
             ab[bestMove] = move;
         }
         return ab;
+    }
+
+    private double monteCarloSearch(Field field, int player) {
+        final int totalGames = 50;
+        int[] results = new int[3];
+        for (int i = 0; i < totalGames; i++) {
+            results[simulateGame(field, player)]++;
+        }
+        return ((results[0] + results[player]) / totalGames);
+    }
+
+    private int simulateGame(Field field, int player) {
+        while (true) {
+            List<Integer> validCols = new LinkedList<>();
+            for (int i = 0; i < field.getNrColumns(); i++) {
+                if (!field.isColumnFull(i)) validCols.add(i);
+            }
+            //if draw i.e. board is full
+            if (validCols.size() == 0) return 0;
+            int col = validCols.get((int) (Math.random() * validCols.size()));
+            field.addDisc(col, player);
+            if (new Winner(field).isWinner(col, player)) return player;
+            player = 3 - player;
+        }
     }
 
     private int newEval(Field field) {
