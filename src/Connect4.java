@@ -375,9 +375,9 @@ public class Connect4 {
         return bot.makeTurn(field, player, banned, Long.MAX_VALUE);
     }
 
-    public static int count;
-    public static int draws;
-    public static int failed;
+    private static int count;
+    private static int draws;
+    private static int failed;
     private static int treeBot = 1;
     private static int bestBot = 2;
     private static int recBot = 0;
@@ -388,12 +388,12 @@ public class Connect4 {
         failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 300;
+        final int totalGames = 200;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(bestBot, bestBot, false, false, false);
+                connect4.play(bestBot, bestBot, false  , false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;
