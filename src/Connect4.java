@@ -290,7 +290,7 @@ public class Connect4 {
     }
 
     private void writeHere() throws IOException {
-        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("experiences.txt"), false));
+        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("/homes/panappin/Connect4AI/Connect4AI/experiences.txt"), false));
         for (String keys : banned.keySet()) {
             writer.println(keys + " " + (Arrays.toString(banned.get(keys).toArray()).replaceAll(" ", "")));
         }
@@ -330,7 +330,7 @@ public class Connect4 {
     }
 
     private void myFileReader() throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader("experiences.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("/homes/panappin/Connect4AI/Connect4AI/experiences.txt"))) {
             String line = br.readLine();
             while (line != null) {
                 String params[] = line.split(" ");
@@ -398,12 +398,12 @@ public class Connect4 {
         int failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 2;
+        final int totalGames = 1;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(bestBot, bestBot, false, false, false);
+                connect4.play(bestBot, bestBot, true, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;
