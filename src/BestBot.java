@@ -108,7 +108,7 @@ public class BestBot implements Bot {
     }
 
     private void myFileReader() {
-        try (BufferedReader br = new BufferedReader(new FileReader("experiences.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("/homes/panappin/Connect4AI/Connect4AI/experiences.txt"))) {
             String line = br.readLine();
             while (line != null) {
                 String params[] = line.split(" ");
@@ -123,8 +123,9 @@ public class BestBot implements Bot {
                 myMoves.put(params[0], list);
                 line = br.readLine();
             }
-        } catch (Exception ignored) {
-        }
+        }catch(Exception e) {
+	e.printStackTrace();
+	}
     }
 
     private List<Integer> toList(String s) {
