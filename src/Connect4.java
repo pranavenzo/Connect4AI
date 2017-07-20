@@ -261,19 +261,19 @@ public class Connect4 {
         myFileReader();
         if (turns < 42) {
             if (currentPlayer == YELLOW) {
-                learn(moves, board, RESULTS.LOSS, 1);
+              //  learn(moves, board, RESULTS.LOSS, 1);
                 Connect4.count++;
             }
             if (currentPlayer == RED) {
-                learn(moves, board, RESULTS.LOSS, 2);
+               // learn(moves, board, RESULTS.LOSS, 2);
             }
         } else {
-            if (currentPlayer == YELLOW) {
+            /*if (currentPlayer == YELLOW) {
                 learn(moves, board, RESULTS.LOSS, 1);
             }
             if (currentPlayer == RED) {
                 learn(moves, board, RESULTS.LOSS, 2);
-            }
+            }*/
             draws++;
         }
         writeHere();
