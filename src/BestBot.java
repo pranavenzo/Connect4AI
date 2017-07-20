@@ -7,35 +7,27 @@ import java.util.*;
  */
 public class BestBot implements Bot {
     private int player;
-
     private int opponent;
-
     private Map<String, int[]> visited;
-
     private final int alpha = 0;
-
     private final int beta = 1;
-
     private final int bestMove = 2;
-
     private final int bestChild = 3;
-
     private int maxDepth;
-
     private Map<String, List<Integer>> myMoves;
 
     BestBot() {
-        maxDepth = 9;
+        maxDepth = 4;
         myMoves = new HashMap<>();
         myFileReader();
     }
 
     private void setMaxdepth(Field field) {
-        int full = 0;
+        double full = 0;
         for (int i = 0; i < field.getNrColumns(); i++) {
-            if (field.isColumnFull(i)) full++;
+            full += 1 - (field.getNumFreeSpacesInCol(i) * 1.0) / field.getNrRows();
         }
-        maxDepth = full + 9;
+        maxDepth = ((int) (full * 3)) + 4;
     }
 
     @Override
@@ -45,6 +37,7 @@ public class BestBot implements Bot {
 
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, boolean isLearn) {
         setMaxdepth(mfield);
+        // System.out.println("\tdepth=" + maxDepth);
         visited = new HashMap<>();
         this.player = player;
         this.opponent = 3 - player;

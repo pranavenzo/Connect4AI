@@ -22,7 +22,6 @@
  *
  * @author Jim van Eeden <jim@starapple.nl>, Joost de Meij <joost@starapple.nl>
  */
-
 public class Field {
     private int[][] mBoard;
     private int mCols = 0, mRows = 0;
@@ -63,7 +62,6 @@ public class Field {
         mCols = cols;
         mBoard = new int[mRows][mCols];
     }
-
 
     /**
      * Sets the number of rows (this clears the board)
@@ -177,7 +175,6 @@ public class Field {
         return r;
     }
 
-
     /**
      * Checks whether the field is full
      *
@@ -199,6 +196,12 @@ public class Field {
      */
     public boolean isColumnFull(int column) {
         return (mBoard[0][column] != 0);
+    }
+
+    public int getNumFreeSpacesInCol(int column) {
+        int i = this.getNrRows() - 1;
+        while (i >= 0 && this.getDisc(i, column) != 0) i--;
+        return i + 1;
     }
 
     /**
