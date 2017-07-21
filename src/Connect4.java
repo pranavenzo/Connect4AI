@@ -261,19 +261,19 @@ public class Connect4 {
         myFileReader();
         if (turns < 42) {
             if (currentPlayer == YELLOW) {
-              //  learn(moves, board, RESULTS.LOSS, 1);
+                learn(moves, board, RESULTS.LOSS, 1);
                 Connect4.count++;
             }
             if (currentPlayer == RED) {
-               // learn(moves, board, RESULTS.LOSS, 2);
+                learn(moves, board, RESULTS.LOSS, 2);
             }
         } else {
-            /*if (currentPlayer == YELLOW) {
+            if (currentPlayer == YELLOW) {
                 learn(moves, board, RESULTS.LOSS, 1);
             }
             if (currentPlayer == RED) {
                 learn(moves, board, RESULTS.LOSS, 2);
-            }*/
+            }
             draws++;
         }
         writeHere();
@@ -398,7 +398,7 @@ public class Connect4 {
         int failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 12000;
+        final int totalGames = 2000;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
