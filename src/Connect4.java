@@ -398,7 +398,7 @@ public class Connect4 {
         int failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 2000;
+        final int totalGames = 7000;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
