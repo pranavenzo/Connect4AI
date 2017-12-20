@@ -27,13 +27,9 @@ import java.util.*;
  */
 public class BotStarter implements Bot {
     Field field;
-
     int player;
-
     HashMap<Integer, List<Integer>> alphaMap;
-
-    int MAX_DEPTH = 6;
-
+    int MAX_DEPTH = 2;
     Map<String, List<Integer>> banned;
 
     /**
@@ -41,17 +37,17 @@ public class BotStarter implements Bot {
      *
      * @return The column where the turn was made.
      */
-    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
+    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, String moves) {
         calls = 0;
         this.banned = banned;
         alphaMap = new HashMap<>();
         this.field = mfield;
         this.player = player;
         int movee = prune(MAX_DEPTH, field, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-        List<Integer> moves = alphaMap.get(movee);
-        if (moves == null) return (int) (Math.random() * (double) field.getNrColumns());
+        List<Integer> mo = alphaMap.get(movee);
+        if (mo == null) return (int) (Math.random() * (double) field.getNrColumns());
         Integer move;
-        move = moves.get((int) (Math.random() * moves.size()));
+        move = mo.get((int) (Math.random() * mo.size()));
         //System.out.println(calls);
         return move;
     }
@@ -227,7 +223,6 @@ public class BotStarter implements Bot {
         for (int c : colCount) {
             if (c >= 4) score += c;
         }
-
         return score - oppScore;
     }
 
@@ -242,7 +237,6 @@ public class BotStarter implements Bot {
                     score[nextPlayer] += 100;
                     break;
                 }
-
                 nextPlayer = 3 - nextPlayer;
             }
         }
@@ -255,7 +249,6 @@ public class BotStarter implements Bot {
                     score[nextPlayer] += 100;
                     break;
                 }
-
                 nextPlayer = 3 - nextPlayer;
             }
         }

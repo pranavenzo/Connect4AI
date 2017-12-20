@@ -17,7 +17,7 @@ public class BestBot implements Bot {
     private Map<String, List<Integer>> myMoves;
 
     BestBot() {
-        maxDepth = 4;
+        maxDepth = 7;
         myMoves = new HashMap<>();
         myFileReader();
     }
@@ -27,24 +27,24 @@ public class BestBot implements Bot {
         for (int i = 0; i < field.getNrColumns(); i++) {
             full += 1 - (field.getNumFreeSpacesInCol(i) * 1.0) / field.getNrRows();
         }
-        maxDepth = ((int) (full * 3)) + 4;
+        maxDepth = ((int) (full * 0.5)) + maxDepth;
     }
 
     @Override
-    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
+    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, String moves) {
         return this.makeTurn(mfield, player, banned, time, false);
     }
 
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, boolean isLearn) {
         setMaxdepth(mfield);
-        // System.out.println("\tdepth=" + maxDepth);
+        //System.out.println("\tdepth=" + maxDepth);
         visited = new HashMap<>();
         this.player = player;
         this.opponent = 3 - player;
         calls = 0;
         int[] defAb = new int[]{Integer.MIN_VALUE, Integer.MAX_VALUE, -1, -1};
         int[] ret = prune(defAb, mfield, true, 0);
-        //System.out.println(calls);
+       //System.out.println(calls);
         if (!isLearn) {
             return ret[bestMove];
         }
@@ -61,7 +61,6 @@ public class BestBot implements Bot {
             int score = newEval(field);
             return new int[]{score, score, -1, score};
         }
-
         List<CompressedGameNode> kids = new LinkedList<>();
         for (int i = 0; i < field.getNrColumns(); i++) {
             if (myMoves.getOrDefault(field.toString(), new LinkedList<>()).contains(i)) {
@@ -101,7 +100,7 @@ public class BestBot implements Bot {
     }
 
     private void myFileReader() {
-        try (BufferedReader br = new BufferedReader(new FileReader("/homes/panappin/Connect4AI/Connect4AI/experiences.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("/Users/pranav/Downloads/Connect4AI/src/experiences.txt"))) {
             String line = br.readLine();
             while (line != null) {
                 String params[] = line.split(" ");
@@ -116,9 +115,9 @@ public class BestBot implements Bot {
                 myMoves.put(params[0], list);
                 line = br.readLine();
             }
-        }catch(Exception e) {
-	e.printStackTrace();
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Integer> toList(String s) {
@@ -133,14 +132,6 @@ public class BestBot implements Bot {
 
     private int[] dup(int[] param) {
         return new int[]{param[0], param[1], param[2], param[3]};
-    }
-
-    public static void main(String[] args) {
-        BestBot bestBot = new BestBot();
-        Field field = new Field("2,0,1,1,2,1,1,1,0,2,1,1,2,2,2,1,2,2,1,1,1,1,2,2,1,1,2,2,2,2,1,2,2,1,1,1,2,2,1,2,1,2", 6, 7);
-        int[] defAb = new int[]{Integer.MIN_VALUE, Integer.MAX_VALUE, -1, -1};
-        int[] ret = bestBot.prune(defAb, field, true, 0);
-        System.out.println(ret[2]);
     }
 
     private boolean abPruning(int[] ab, int[] par, boolean isMaximizer) {
@@ -167,7 +158,8 @@ public class BestBot implements Bot {
         return ((results[0] + results[player]) / totalGames);
     }
 
-    private int simulateGame(Field field, int player) {
+    private int simulateGame(Field field2, int player) {
+        Field field = new Field(field2);
         while (true) {
             List<Integer> validCols = new LinkedList<>();
             for (int i = 0; i < field.getNrColumns(); i++) {

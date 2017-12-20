@@ -3,29 +3,22 @@ import java.util.*;
 
 public class Connect4 {
     private static final char NONE = ' ';
-
     private static final char RED = 'R';
-
     private static final char YELLOW = 'Y';
-
     private char[][] board;
-
     private int turns;
-
     private int rows;
-
     private int columns;
-
     private Map<String, List<Integer>> banned;
-
     private Map<String, Integer> boardToMoveYellow;
-
     private Map<String, Integer> boardToMoveRed;
+    private Bot mcts;
 
     /**
      * Initializes the instance variables.
      */
     private Connect4() {
+        mcts = new MCTSBot();
         rows = 6;
         columns = 7;
         board = new char[rows][columns];
@@ -193,13 +186,46 @@ public class Connect4 {
      */
     private void play(int bot1, int bot2, boolean print, boolean human1, boolean human2) throws IOException {
         List<Integer> moves = new LinkedList<>();
+        String movesNum = "9";
         char currentPlayer = RED;
         // Begin playing the game
         Scanner in = new Scanner(System.in);
         int col = -1;
         int row = -1;
-        Bot botnum1 = bot1 == recBot ? new BotStarter() : bot1 == treeBot ? new TreeBot(false) : new BestBot();
-        Bot botnum2 = bot2 == recBot ? new BotStarter() : bot2 == treeBot ? new TreeBot(false) : new BestBot();
+        Bot botnum1;
+        Bot botnum2;
+        switch (bot1) {
+            case recBot:
+                botnum1 = new BotStarter();
+                break;
+            case treeBot:
+                botnum1 = new TreeBot(false);
+                break;
+            case bestBot:
+                botnum1 = new BestBot();
+                break;
+            case mctsBot:
+                botnum1 = mcts;
+                break;
+            default:
+                botnum1 = new BestBot();
+        }
+        switch (bot2) {
+            case recBot:
+                botnum2 = new BotStarter();
+                break;
+            case treeBot:
+                botnum2 = new TreeBot(false);
+                break;
+            case bestBot:
+                botnum2 = new BestBot();
+                break;
+            case mctsBot:
+                botnum2 = mcts;
+                break;
+            default:
+                botnum2 = new BestBot();
+        }
         do {
             currentPlayer = currentPlayer == RED ? YELLOW : RED;
             if (print) {
@@ -209,18 +235,19 @@ public class Connect4 {
             // read and validate the input
             if (currentPlayer == RED & !human2) {
                 long startTime = System.currentTimeMillis();
-                col = bot(botnum2, 1, bot2);
+                col = bot(botnum2, 1, bot2, movesNum);
                 boardToMoveRed.put(serializeBoard(this.board), col);
                 System.out.print(col);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
+                movesNum += col;
                 if (print) {
                     long endTime = System.currentTimeMillis();
                     System.out.println("Time taken: " + (endTime - startTime) + "ms");
                 }
             } else if (currentPlayer == YELLOW & !human1) {
                 long startTime = System.currentTimeMillis();
-                col = bot(botnum1, 2, bot1);
+                col = bot(botnum1, 2, bot1, movesNum);
                 boardToMoveYellow.put(serializeBoard(this.board), col);
                 System.out.print(col);
                 try {
@@ -230,6 +257,7 @@ public class Connect4 {
                     throw e;
                 }
                 moves.add(col);
+                movesNum += col;
                 if (print) {
                     long endTime = System.currentTimeMillis();
                     System.out.println("Time taken: " + (endTime - startTime) + "ms");
@@ -249,6 +277,7 @@ public class Connect4 {
                         continue;
                     }
                     moves.add(col);
+                    movesNum += col;
                     row = this.putPiece(col, currentPlayer);
                 } while (row < 0);
             }
@@ -290,7 +319,7 @@ public class Connect4 {
     }
 
     private void writeHere() throws IOException {
-        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("/homes/panappin/Connect4AI/Connect4AI/experiences.txt"), false));
+        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("/Users/pranav/Downloads/Connect4AI/src/experiences.txt"), false));
         for (String keys : banned.keySet()) {
             writer.println(keys + " " + (Arrays.toString(banned.get(keys).toArray()).replaceAll(" ", "")));
         }
@@ -330,7 +359,7 @@ public class Connect4 {
     }
 
     private void myFileReader() throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader("/homes/panappin/Connect4AI/Connect4AI/experiences.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("/Users/pranav/Downloads/Connect4AI/src/experiences.txt"))) {
             String line = br.readLine();
             while (line != null) {
                 String params[] = line.split(" ");
@@ -369,7 +398,7 @@ public class Connect4 {
         return board;
     }
 
-    private int bot(Bot bot, int player, int botNum) {
+    private int bot(Bot bot, int player, int botNum, String moves) {
         StringBuilder ret = new StringBuilder();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -379,17 +408,14 @@ public class Connect4 {
         ret = new StringBuilder(ret.substring(0, ret.length() - 1));
         Field field = new Field(columns, rows);
         field.parseFromString(ret.toString());
-        return bot.makeTurn(field, player, banned, Long.MAX_VALUE);
+        return bot.makeTurn(field, player, banned, Long.MAX_VALUE, moves);
     }
 
     private static int count;
-
     private static int draws;
-
     private static final int treeBot = 1;
-
     private static final int bestBot = 2;
-
+    private static final int mctsBot = 3;
     private static final int recBot = 0;
 
     public static void main(String[] args) throws IOException {
@@ -398,12 +424,12 @@ public class Connect4 {
         int failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 2000;
+        final int totalGames = 100;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             Connect4 connect4 = new Connect4();
             try {
-                connect4.play(bestBot, bestBot, false, false, false);
+                connect4.play(mctsBot, recBot, false, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;

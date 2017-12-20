@@ -10,5 +10,5 @@ public interface Bot {
     double loser = -1000;
     double seen = -10000;
 
-    int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time);
+    int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, String moves);
 }

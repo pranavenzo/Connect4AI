@@ -1,11 +1,8 @@
 // Copyright 2015 theaigames.com (developers@theaigames.com)
-
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
 //    You may obtain a copy of the License at
-
 //        http://www.apache.org/licenses/LICENSE-2.0
-
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,11 +24,8 @@ import java.util.Scanner;
  */
 public class BotParser {
     final Scanner scan;
-
     final Bot bot;
-
     private Field mField;
-
     public static int mBotId = 0;
 
     public BotParser(Bot bot) {
@@ -43,13 +37,10 @@ public class BotParser {
         mField = new Field(0, 0);
         while (scan.hasNextLine()) {
             String line = scan.nextLine();
-
             if (line.length() == 0) {
                 continue;
             }
-
             String[] parts = line.split(" ");
-
             if (parts[0].equals("settings")) {
                 if (parts[1].equals("field_columns")) {
                     mField.setColumns(Integer.parseInt(parts[2]));
@@ -72,7 +63,7 @@ public class BotParser {
                         time = Long.parseLong(parts[2]);
                     } catch (Exception ignored) {
                     }
-                    int column = bot.makeTurn(mField, mBotId, null, time);
+                    int column = bot.makeTurn(mField, mBotId, null, time, "9");
                     System.out.println("place_disc " + column);
                 }
             } else {

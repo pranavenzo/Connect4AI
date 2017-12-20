@@ -77,7 +77,7 @@ public class TreeBot implements Bot {
     }
 
     @Override
-    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time) {
+    public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, String moves) {
         this.time = time;
         this.start = System.currentTimeMillis();
         this.field = mfield;
