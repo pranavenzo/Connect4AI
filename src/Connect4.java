@@ -12,7 +12,7 @@ public class Connect4 {
     private Map<String, List<Integer>> banned;
     private Map<String, Integer> boardToMoveYellow;
     private Map<String, Integer> boardToMoveRed;
-    private Bot mcts;
+    public Bot mcts;
 
     /**
      * Initializes the instance variables.
@@ -424,10 +424,11 @@ public class Connect4 {
         int failed = 0;
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
-        final int totalGames = 100;
+        Connect4 connect4 = new Connect4();
+        final int totalGames = 2;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
-            Connect4 connect4 = new Connect4();
+            //connect4 = new Connect4();
             try {
                 connect4.play(mctsBot, recBot, false, false, false);
             } catch (Exception e) {
@@ -438,6 +439,9 @@ public class Connect4 {
             System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
             long endTimeGame = System.currentTimeMillis();
             System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
+            MCTSBot x = (MCTSBot) connect4.mcts;
+            x.writeHere();
+            x.readFromFile();
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Time taken: " + (endTime - startTime) + "ms");

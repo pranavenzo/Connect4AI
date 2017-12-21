@@ -1,3 +1,6 @@
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,26 +14,53 @@ public class MCTSBot implements Bot {
     private final int numCols = 7;
     private final int numRows = 6;
     private Map<String, MCTSGameNode> vertexMap;
+    private int myPlayer;
 
     MCTSBot() {
         vertexMap = new HashMap<>();
     }
 
-//    private void writeHere() throws IOException {
-//        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("tree.txt"), false));
-//        for (String keys : vertexMap.keySet()) {
-//            writer.println(keys + " " + (Arrays.toString(banned.get(keys).toArray()).replaceAll(" ", "")));
-//        }
-//        writer.close();
-//    }
-//
-//    public void readFromFile() {
-//    }
+    private int player;
+    private double N;
+    private double Q;
+    private String identifier;
+    private int preMove;
+    private int numChildren;
+    private List<Integer> unexploredChildren;
+
+    public void writeHere() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("tree.txt"), false));
+        writer.write("[");
+        String toW = "";
+        for (String keys : vertexMap.keySet()) {
+            MCTSGameNode toWrite = vertexMap.get(keys);
+            String s = objectMapper.writeValueAsString(toWrite);
+            toW += (s + ",");
+        }
+        writer.write(toW.substring(0, toW.length() - 1));
+        writer.write("]");
+        writer.close();
+    }
+
+    public void readFromFile() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<MCTSGameNode> myObjects = mapper.readValue(jsonFile(), new TypeReference<List<MCTSGameNode>>() {
+        });
+        for (MCTSGameNode x : myObjects) {
+            vertexMap.put(x.getIdentifier(), x);
+        }
+    }
+
+    private File jsonFile() {
+        return new File("tree.txt");
+    }
 
     @Override
     public int makeTurn(Field mfield, int player, Map<String,
             List<Integer>> banned, long time, String moves) {
-        int numIterations = 10000;
+        myPlayer = player;
+        int numIterations = 100;
         MCTSGameNode v0 = vertexMap.getOrDefault(moves, new MCTSGameNode(9, numCols,
                 "", vertexMap, player));
         vertexMap.put(v0.getIdentifier(), v0);
@@ -62,8 +92,13 @@ public class MCTSBot implements Bot {
     public int defaultPolicy(MCTSGameNode v, int player) {
         Field field = generateState(v, player);
         int result = simulateGame(field, player);
-        if (result == player) return 1;
-        if (result == 3 - player) return -1;
+        if (player == myPlayer) {
+            if (result == player) return 1;
+            if (result == 3 - player) return -1;
+        } else {
+            if (result == player) return -1;
+            if (result == 3 - player) return 1;
+        }
         return 0;
     }
 
