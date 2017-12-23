@@ -19,7 +19,9 @@ public class MCTSBot implements Bot {
     MCTSBot() {
         vertexMap = new HashMap<>();
     }
-
+    public int getMapSize() {
+	return vertexMap.size();
+    }
     private int player;
     private double N;
     private double Q;
@@ -30,7 +32,7 @@ public class MCTSBot implements Bot {
 
     public void writeHere() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("tree.txt"), false));
+       PrintWriter writer = new PrintWriter(new FileOutputStream(new File("tree.txt"), false));
         writer.write("[");
         String toW = "";
         for (String keys : vertexMap.keySet()) {
@@ -45,8 +47,12 @@ public class MCTSBot implements Bot {
 
     public void readFromFile() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        List<MCTSGameNode> myObjects = mapper.readValue(jsonFile(), new TypeReference<List<MCTSGameNode>>() {
-        });
+	List<MCTSGameNode> myObjects;
+        try{
+         myObjects = mapper.readValue(jsonFile(), new TypeReference<List<MCTSGameNode>>() {
+        });        
+}
+catch(com.fasterxml.jackson.databind.JsonMappingException e) {e.printStackTrace(); return;}
         for (MCTSGameNode x : myObjects) {
             vertexMap.put(x.getIdentifier(), x);
         }
@@ -102,7 +108,7 @@ public class MCTSBot implements Bot {
         return 0;
     }
 
-    private int simulateGame(Field field2, int player) {
+       private int simulateGame(Field field2, int player) {
         Field field = new Field(field2);
         while (true) {
             List<Integer> validCols = new LinkedList<>();
@@ -117,7 +123,6 @@ public class MCTSBot implements Bot {
             player = 3 - player;
         }
     }
-
     private MCTSGameNode expand(MCTSGameNode v) {
         int move = v.getRandomAction();
         MCTSGameNode nextNode = new MCTSGameNode(move, numCols,

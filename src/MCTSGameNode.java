@@ -97,7 +97,7 @@ public class MCTSGameNode {
 
     @JsonIgnore
     public double getScore(MCTSGameNode parent, int explore) {
-        return this.Q / this.N + explore * c * Math.sqrt(Math.log(parent.N) / this.N);
+        return this.Q / this.N + explore * c * Math.sqrt(2*Math.log(parent.N) / this.N);
     }
 
     public void setN(double n) {

@@ -13,7 +13,20 @@ public class Connect4 {
     private Map<String, Integer> boardToMoveYellow;
     private Map<String, Integer> boardToMoveRed;
     public Bot mcts;
-
+    public void reset() {
+        rows = 6;
+        columns = 7;
+        board = new char[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                board[i][j] = NONE;
+            }
+        }
+        turns = 0;
+        banned = new HashMap<>();
+        boardToMoveYellow = new HashMap<>();
+        boardToMoveRed = new HashMap<>();
+    }
     /**
      * Initializes the instance variables.
      */
@@ -287,25 +300,25 @@ public class Connect4 {
             this.printScreen();
             System.out.printf("\n!!! Winner is Player '%c' !!!\n", currentPlayer);
         }
-        myFileReader();
+        //myFileReader();
         if (turns < 42) {
             if (currentPlayer == YELLOW) {
-                learn(moves, board, RESULTS.LOSS, 1);
+                //learn(moves, board, RESULTS.LOSS, 1);
                 Connect4.count++;
             }
             if (currentPlayer == RED) {
-                learn(moves, board, RESULTS.LOSS, 2);
+//                learn(moves, board, RESULTS.LOSS, 2);
             }
         } else {
             if (currentPlayer == YELLOW) {
-                learn(moves, board, RESULTS.LOSS, 1);
+  //              learn(moves, board, RESULTS.LOSS, 1);
             }
             if (currentPlayer == RED) {
-                learn(moves, board, RESULTS.LOSS, 2);
+    //            learn(moves, board, RESULTS.LOSS, 2);
             }
             draws++;
         }
-        writeHere();
+//        writeHere();
     }
 
     private String serializeBoard(char[][] board) {
@@ -333,7 +346,7 @@ public class Connect4 {
     }
 
     private void learn(List<Integer> moves, char[][] board, RESULTS result, int player) throws IOException {
-        if (result == RESULTS.LOSS) {
+        if (result == RESULTS.LOSS && false) {
             do {
                 if (moves.size() < 2) return;
                 int lastMove = moves.remove(moves.size() - 1);
@@ -425,7 +438,9 @@ public class Connect4 {
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
         Connect4 connect4 = new Connect4();
-        final int totalGames = 2;
+        MCTSBot y = (MCTSBot) connect4.mcts;
+        y.readFromFile();
+        final int totalGames = 50;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             //connect4 = new Connect4();
@@ -439,10 +454,12 @@ public class Connect4 {
             System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
             long endTimeGame = System.currentTimeMillis();
             System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
-            MCTSBot x = (MCTSBot) connect4.mcts;
-            x.writeHere();
-            x.readFromFile();
+            MCTSBot x = (MCTSBot) connect4.mcts;	
+  	    System.out.println(x.getMapSize());
+ 	    connect4.reset();	    
         }
+        MCTSBot x = (MCTSBot) connect4.mcts;
+//	x.writeHere();
         long endTime = System.currentTimeMillis();
         System.out.println("Time taken: " + (endTime - startTime) + "ms");
         System.out.println("Yellow wins:" + count);
