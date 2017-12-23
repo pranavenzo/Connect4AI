@@ -13,6 +13,7 @@ public class Connect4 {
     private Map<String, Integer> boardToMoveYellow;
     private Map<String, Integer> boardToMoveRed;
     public Bot mcts;
+
     public void reset() {
         rows = 6;
         columns = 7;
@@ -27,6 +28,7 @@ public class Connect4 {
         boardToMoveYellow = new HashMap<>();
         boardToMoveRed = new HashMap<>();
     }
+
     /**
      * Initializes the instance variables.
      */
@@ -250,7 +252,7 @@ public class Connect4 {
                 long startTime = System.currentTimeMillis();
                 col = bot(botnum2, 1, bot2, movesNum);
                 boardToMoveRed.put(serializeBoard(this.board), col);
-                System.out.print(col);
+                //System.out.print(col);
                 row = this.putPiece(col, currentPlayer);
                 moves.add(col);
                 movesNum += col;
@@ -262,7 +264,7 @@ public class Connect4 {
                 long startTime = System.currentTimeMillis();
                 col = bot(botnum1, 2, bot1, movesNum);
                 boardToMoveYellow.put(serializeBoard(this.board), col);
-                System.out.print(col);
+               // System.out.print(col);
                 try {
                     row = this.putPiece(col, currentPlayer);
                 } catch (Exception e) {
@@ -311,10 +313,10 @@ public class Connect4 {
             }
         } else {
             if (currentPlayer == YELLOW) {
-  //              learn(moves, board, RESULTS.LOSS, 1);
+                //              learn(moves, board, RESULTS.LOSS, 1);
             }
             if (currentPlayer == RED) {
-    //            learn(moves, board, RESULTS.LOSS, 2);
+                //            learn(moves, board, RESULTS.LOSS, 2);
             }
             draws++;
         }
@@ -438,9 +440,9 @@ public class Connect4 {
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
         Connect4 connect4 = new Connect4();
-        MCTSBot y = (MCTSBot) connect4.mcts;
-        y.readFromFile();
-        final int totalGames = 50;
+//        MCTSBot y = (MCTSBot) connect4.mcts;
+//        y.readFromFile();
+        final int totalGames = 50000;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             //connect4 = new Connect4();
@@ -451,12 +453,14 @@ public class Connect4 {
                 failed++;
                 if (isDebug) throw e;
             }
-            System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
-            long endTimeGame = System.currentTimeMillis();
-            System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
-            MCTSBot x = (MCTSBot) connect4.mcts;	
-  	    System.out.println(x.getMapSize());
- 	    connect4.reset();	    
+            if (i % 1000 == 0) {
+                System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
+                long endTimeGame = System.currentTimeMillis();
+                System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
+                MCTSBot x = (MCTSBot) connect4.mcts;
+                System.out.println(x.getMapSize());
+            }
+            connect4.reset();
         }
         MCTSBot x = (MCTSBot) connect4.mcts;
 //	x.writeHere();

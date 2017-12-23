@@ -48,9 +48,9 @@ public class MCTSGameNode {
         this.numChildren = 0;
         this.unexploredChildren = new LinkedList<>();
         for (int i = 0; i < numCols; i++) {
-            if (!vertexMap.containsKey(parentIdentifier + preMove + i)) {
+            //if (!vertexMap.containsKey(parentIdentifier + preMove + i)) {
                 unexploredChildren.add(i);
-            }
+            //}
         }
         identifier = parentIdentifier + preMove;
         this.player = player;
@@ -93,11 +93,11 @@ public class MCTSGameNode {
     }
 
     @JsonIgnore
-    private static final double c = 0.5;
+    private static final double c = 0.707;
 
     @JsonIgnore
     public double getScore(MCTSGameNode parent, int explore) {
-        return this.Q / this.N + explore * c * Math.sqrt(2*Math.log(parent.N) / this.N);
+        return this.Q / this.N + explore * c * Math.sqrt(2 * Math.log(parent.N) / this.N);
     }
 
     public void setN(double n) {
