@@ -63,50 +63,54 @@ public class MCTSBot implements Bot {
     public int makeTurn(Field mfield, int player, Map<String,
             List<Integer>> banned, long time, String moves) {
         myPlayer = player;
-        int numIterations = 1000;
+        int numIterations = 3000;
         MCTSGameNode v0 = vertexMap.getOrDefault(moves, new MCTSGameNode(9, numCols,
                 "", vertexMap, player));
         vertexMap.put(v0.getIdentifier(), v0);
         for (int i = 0; i < numIterations; i++) {
-            MCTSGameNode vl = treePolicy(v0);
+            Object[] ret = treePolicy(v0, player);
+            MCTSGameNode vl = (MCTSGameNode) ret[0];
+            int currPlayer = (Integer) ret[1];
             int delta = -1;
             try {
-                delta = defaultPolicy(vl, player);
+                delta = defaultPolicy(vl, currPlayer);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            backup(vl, delta);
+            backup(vl, delta, currPlayer);
         }
         return bestChild(v0, 0).getPreMove();
     }
 
-    public MCTSGameNode treePolicy(MCTSGameNode v) {
+    public Object[] treePolicy(MCTSGameNode v, int currPlayer) {
         while (true) {
             if (v.getNumChildren() < numCols) {
                 try {
-                    return expand(v);
+                    return new Object[]{expand(v), currPlayer};
                 } catch (Exception e) {
                     throw e;
                 }
             }
+            currPlayer = -currPlayer;
             v = bestChild(v, 1);
         }
     }
 
-    public void backup(MCTSGameNode v, int qValue) {
+    public void backup(MCTSGameNode v, int qValue, int currPlayer) {
         while (v != null) {
             v.incrementN();
-            v.modifyQ(qValue);
+            v.modifyQ(qValue * (-currPlayer));
             v = vertexMap.get(v.getParentIdentifier());
+            currPlayer = -currPlayer;
         }
     }
 
-    public int defaultPolicy(MCTSGameNode v, int player) throws ExecutionException, InterruptedException {
-        Field field = generateState(v, player);
+    public int defaultPolicy(MCTSGameNode v, int player) {
+        Field field = generateState(v);
         int result = 0;
-        int numRuns = 100;
+        int numRuns = 1;
         for (int i = 0; i < numRuns; i++) {
-            result += convertResult(simulateGame(field, player), player);
+            result += simulateGame(field, player);
         }
         return (int) Math.round(result / (1.0 * numRuns));
     }
@@ -134,7 +138,7 @@ public class MCTSBot implements Bot {
             int col = getRandomValue(validCols);
             field.addDisc(col, player);
             if (new Winner(field).isWinner(col, player)) return player;
-            player = 3 - player;
+            player = -player;
         }
     }
 
@@ -172,11 +176,13 @@ public class MCTSBot implements Bot {
         return l.get(index);
     }
 
-    public Field generateState(MCTSGameNode v, int player) {
+    public Field generateState(MCTSGameNode v) {
+        int player = 1;
         String chars[] = v.getIdentifier().split("");
         Field field = new Field(numCols, numRows);
         for (int i = 1; i < chars.length; i++) {
             field.addDisc(Integer.parseInt(chars[i]), player);
+            player = -player;
         }
         return field;
     }

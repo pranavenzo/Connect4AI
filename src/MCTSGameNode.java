@@ -93,7 +93,7 @@ public class MCTSGameNode {
     }
 
     @JsonIgnore
-    private static final double c = 0.707;
+    private static final double c = 2;
 
     @JsonIgnore
     public double getScore(MCTSGameNode parent, int explore) {

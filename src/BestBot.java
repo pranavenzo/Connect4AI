@@ -17,9 +17,9 @@ public class BestBot implements Bot {
     private Map<String, List<Integer>> myMoves;
 
     BestBot() {
-        maxDepth = 7;
+        maxDepth = 5;
         myMoves = new HashMap<>();
-        myFileReader();
+        //myFileReader();
     }
 
     private void setMaxdepth(Field field) {
@@ -36,7 +36,7 @@ public class BestBot implements Bot {
     }
 
     public int makeTurn(Field mfield, int player, Map<String, List<Integer>> banned, long time, boolean isLearn) {
-        setMaxdepth(mfield);
+        //setMaxdepth(mfield);
         //System.out.println("\tdepth=" + maxDepth);
         visited = new HashMap<>();
         this.player = player;
@@ -44,7 +44,7 @@ public class BestBot implements Bot {
         calls = 0;
         int[] defAb = new int[]{Integer.MIN_VALUE, Integer.MAX_VALUE, -1, -1};
         int[] ret = prune(defAb, mfield, true, 0);
-       //System.out.println(calls);
+        //System.out.println("Number of Calls" + calls);
         if (!isLearn) {
             return ret[bestMove];
         }

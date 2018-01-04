@@ -443,12 +443,12 @@ public class Connect4 {
         Connect4 connect4 = new Connect4();
         //        MCTSBot y = (MCTSBot) connect4.mcts;
         //        y.readFromFile();
-        final int totalGames = 1000;
+        final int totalGames = 100;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             //connect4 = new Connect4();
             try {
-                connect4.play(mctsBot, recBot, false, false, false);
+                connect4.play(recBot, mctsBot, false, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;
