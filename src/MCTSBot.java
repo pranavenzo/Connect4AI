@@ -32,8 +32,10 @@ public class MCTSBot implements Bot {
         String toW = "";
         for (String keys : vertexMap.keySet()) {
             MCTSGameNode toWrite = vertexMap.get(keys);
-            String s = objectMapper.writeValueAsString(toWrite);
-            toW += (s + ",");
+            if (toWrite.getIdentifier().length() < 5) {
+                String s = objectMapper.writeValueAsString(toWrite);
+                toW += (s + ",\n");
+            }
         }
         writer.write(toW.substring(0, toW.length() - 1));
         writer.write("]");
