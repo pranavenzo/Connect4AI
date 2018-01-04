@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
@@ -264,7 +265,7 @@ public class Connect4 {
                 long startTime = System.currentTimeMillis();
                 col = bot(botnum1, 2, bot1, movesNum);
                 boardToMoveYellow.put(serializeBoard(this.board), col);
-               // System.out.print(col);
+                // System.out.print(col);
                 try {
                     row = this.putPiece(col, currentPlayer);
                 } catch (Exception e) {
@@ -440,9 +441,9 @@ public class Connect4 {
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
         Connect4 connect4 = new Connect4();
-//        MCTSBot y = (MCTSBot) connect4.mcts;
-//        y.readFromFile();
-        final int totalGames = 50000;
+        //        MCTSBot y = (MCTSBot) connect4.mcts;
+        //        y.readFromFile();
+        final int totalGames = 1000;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             //connect4 = new Connect4();
@@ -453,8 +454,9 @@ public class Connect4 {
                 failed++;
                 if (isDebug) throw e;
             }
-            if (i % 1000 == 0) {
+            if (i % 10 == 0) {
                 System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
+                System.out.println("Win ratio: " + (count / (i + 1)));
                 long endTimeGame = System.currentTimeMillis();
                 System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
                 MCTSBot x = (MCTSBot) connect4.mcts;
@@ -463,7 +465,7 @@ public class Connect4 {
             connect4.reset();
         }
         MCTSBot x = (MCTSBot) connect4.mcts;
-//	x.writeHere();
+        //	x.writeHere();
         long endTime = System.currentTimeMillis();
         System.out.println("Time taken: " + (endTime - startTime) + "ms");
         System.out.println("Yellow wins:" + count);

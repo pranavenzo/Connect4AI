@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * Created by pranav on 12/19/17.
@@ -62,13 +63,18 @@ public class MCTSBot implements Bot {
     public int makeTurn(Field mfield, int player, Map<String,
             List<Integer>> banned, long time, String moves) {
         myPlayer = player;
-        int numIterations = 30;
+        int numIterations = 1000;
         MCTSGameNode v0 = vertexMap.getOrDefault(moves, new MCTSGameNode(9, numCols,
                 "", vertexMap, player));
         vertexMap.put(v0.getIdentifier(), v0);
         for (int i = 0; i < numIterations; i++) {
             MCTSGameNode vl = treePolicy(v0);
-            int delta = defaultPolicy(vl, player);
+            int delta = -1;
+            try {
+                delta = defaultPolicy(vl, player);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             backup(vl, delta);
         }
         return bestChild(v0, 0).getPreMove();
@@ -79,7 +85,7 @@ public class MCTSBot implements Bot {
             if (v.getNumChildren() < numCols) {
                 try {
                     return expand(v);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     throw e;
                 }
             }
@@ -95,10 +101,10 @@ public class MCTSBot implements Bot {
         }
     }
 
-    public int defaultPolicy(MCTSGameNode v, int player) {
+    public int defaultPolicy(MCTSGameNode v, int player) throws ExecutionException, InterruptedException {
         Field field = generateState(v, player);
         int result = 0;
-        int numRuns = 1;
+        int numRuns = 100;
         for (int i = 0; i < numRuns; i++) {
             result += convertResult(simulateGame(field, player), player);
         }
