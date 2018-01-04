@@ -2,31 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d14b9f44-622e-4bdf-b604-201413f04ccc" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/BS.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/BestBot.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Bot.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/BotParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/BotStarter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/CompressedGameNode.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/CompressedGameNodeComparator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Connect4$RESULTS.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Connect4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Field.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/GameNode.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/GameNodeComparator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/MCTSBot$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/MCTSBot.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/MCTSGameNode.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Tool.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/TreeBot.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Winner.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Connect4AI/Connect4$RESULTS.class" afterPath="$PROJECT_DIR$/out/production/Connect4AI/Connect4$RESULTS.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Connect4AI/Connect4.class" afterPath="$PROJECT_DIR$/out/production/Connect4AI/Connect4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Connect4AI/MCTSBot$1.class" afterPath="$PROJECT_DIR$/out/production/Connect4AI/MCTSBot$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Connect4AI/MCTSBot.class" afterPath="$PROJECT_DIR$/out/production/Connect4AI/MCTSBot.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Connect4.java" afterPath="$PROJECT_DIR$/src/Connect4.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/MCTSBot.java" afterPath="$PROJECT_DIR$/src/MCTSBot.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,8 +39,8 @@
       <file leaf-file-name="Connect4.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Connect4.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="598">
-              <caret line="458" column="67" lean-forward="false" selection-start-line="458" selection-start-column="67" selection-end-line="458" selection-end-column="67" />
+            <state relative-caret-position="278">
+              <caret line="458" column="68" lean-forward="false" selection-start-line="458" selection-start-column="68" selection-end-line="458" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -523,10 +500,10 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34018987" sideWeight="0.503231" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4265306" sideWeight="0.49676898" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4265306" sideWeight="0.49676898" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982457" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.63040936" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6295918" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26862028" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -971,8 +948,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Connect4.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="598">
-          <caret line="458" column="67" lean-forward="false" selection-start-line="458" selection-start-column="67" selection-end-line="458" selection-end-column="67" />
+        <state relative-caret-position="278">
+          <caret line="458" column="68" lean-forward="false" selection-start-line="458" selection-start-column="68" selection-end-line="458" selection-end-column="68" />
           <folding />
         </state>
       </provider>

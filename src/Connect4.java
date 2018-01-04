@@ -456,9 +456,10 @@ public class Connect4 {
             }
             if (i % 10 == 0) {
                 System.out.println("Finished game: " + (i + 1) + "\nYellow wins: " + count);
-                System.out.println("Win ratio: " + (count / (i + 1)));
+                System.out.println("Win ratio: " + (count / (i + 1.0)));
                 long endTimeGame = System.currentTimeMillis();
                 System.out.println("Time taken: " + (endTimeGame - startTimeGame) + "ms");
+                System.out.println("Average Time taken per game: " + ((endTimeGame - startTime) / (i + 1.0)) + "ms");
                 MCTSBot x = (MCTSBot) connect4.mcts;
                 System.out.println(x.getMapSize());
             }
