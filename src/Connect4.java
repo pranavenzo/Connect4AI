@@ -263,7 +263,7 @@ public class Connect4 {
                 }
             } else if (currentPlayer == YELLOW & !human1) {
                 long startTime = System.currentTimeMillis();
-                col = bot(botnum1, 2, bot1, movesNum);
+                col = bot(botnum1, -1, bot1, movesNum);
                 boardToMoveYellow.put(serializeBoard(this.board), col);
                 // System.out.print(col);
                 try {
@@ -441,14 +441,14 @@ public class Connect4 {
         boolean isDebug = true;
         long startTime = System.currentTimeMillis();
         Connect4 connect4 = new Connect4();
-        //        MCTSBot y = (MCTSBot) connect4.mcts;
-        //        y.readFromFile();
-        final int totalGames = 100;
+        MCTSBot y = (MCTSBot) connect4.mcts;
+        y.readFromFile();
+        final int totalGames = 1;
         for (int i = 0; i < totalGames; i++) {
             long startTimeGame = System.currentTimeMillis();
             //connect4 = new Connect4();
             try {
-                connect4.play(recBot, mctsBot, false, false, false);
+                connect4.play(bestBot, mctsBot, false, false, false);
             } catch (Exception e) {
                 System.out.println("Game: " + (i + 1) + "\nFailed");
                 failed++;
@@ -466,11 +466,12 @@ public class Connect4 {
             connect4.reset();
         }
         MCTSBot x = (MCTSBot) connect4.mcts;
-        //	x.writeHere();
+        x.writeHere();
         long endTime = System.currentTimeMillis();
         System.out.println("Time taken: " + (endTime - startTime) + "ms");
         System.out.println("Yellow wins:" + count);
         System.out.println("Draws:" + draws);
+        System.out.println("Red Wins:" + (totalGames - count - draws));
         System.out.println("Failed:" + failed);
     }
 }

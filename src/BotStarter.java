@@ -29,7 +29,7 @@ public class BotStarter implements Bot {
     Field field;
     int player;
     HashMap<Integer, List<Integer>> alphaMap;
-    int MAX_DEPTH = 2;
+    int MAX_DEPTH = 6;
     Map<String, List<Integer>> banned;
 
     /**

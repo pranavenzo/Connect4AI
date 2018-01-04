@@ -17,7 +17,7 @@ public class BestBot implements Bot {
     private Map<String, List<Integer>> myMoves;
 
     BestBot() {
-        maxDepth = 5;
+        maxDepth = 7;
         myMoves = new HashMap<>();
         //myFileReader();
     }
