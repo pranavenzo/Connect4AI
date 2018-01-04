@@ -1,10 +1,7 @@
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -37,7 +34,7 @@ public class MCTSBot implements Bot {
                 toW += (s + ",\n");
             }
         }
-        writer.write(toW.substring(0, toW.length() - 1));
+        writer.write(toW.substring(0, toW.length() - 2));
         writer.write("]");
         writer.close();
     }
@@ -48,7 +45,7 @@ public class MCTSBot implements Bot {
         try {
             myObjects = mapper.readValue(jsonFile(), new TypeReference<List<MCTSGameNode>>() {
             });
-        } catch (com.fasterxml.jackson.databind.JsonMappingException e) {
+        } catch (com.fasterxml.jackson.databind.JsonMappingException | FileNotFoundException e) {
             e.printStackTrace();
             return;
         }
